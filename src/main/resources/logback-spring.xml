@@ -32,7 +32,7 @@
         </logger>
     </springProfile>
 
-    <springProfile name="rus-env">
+    <springProfile name="dacs-env">
         <root level="info">
             <appender-ref ref="file" />
         </root>

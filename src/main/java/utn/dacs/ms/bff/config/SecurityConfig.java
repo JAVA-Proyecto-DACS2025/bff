@@ -37,8 +37,9 @@ public class SecurityConfig {
 				.authorizeRequests(authorize -> authorize
 						.antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 						.antMatchers("/metrics", "/metrics/**").permitAll()
+						//.antMatchers("/ping","/conector/ping","/backend/ping").permitAll()
 						.antMatchers("/ping","/conector/ping").permitAll()
-						.antMatchers("/version","/conector/version").permitAll()
+						.antMatchers("/version","/conector/version","/backend/version").permitAll()
 						.anyRequest().authenticated()
 				).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()

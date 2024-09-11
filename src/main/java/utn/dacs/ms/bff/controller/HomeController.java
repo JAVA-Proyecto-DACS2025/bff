@@ -20,4 +20,9 @@ public class HomeController {
         return ApplicationContextProvider.getApplicationContext().getBean("buildInfo");
     }
 
+	@GetMapping(value = "/prueba/ping")
+    public Object ping1() {
+        return "Hello from DACS MS BFF ping";
+    }
+	
 }

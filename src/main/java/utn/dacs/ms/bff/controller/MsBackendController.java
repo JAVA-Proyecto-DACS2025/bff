@@ -8,24 +8,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import utn.dacs.ms.bff.dto.BuildInfoDTO;
-import utn.dacs.ms.bff.service.MsApiConectorService;
+import utn.dacs.ms.bff.service.MsApiBackendService;
 
 @RestController
-@RequestMapping("/conector")
+@RequestMapping("/backend")
 @Slf4j
-public class MsBffController {
+public class MsBackendController {
 
     @Autowired
-    private MsApiConectorService apiConectorService;
+    private MsApiBackendService apiBackendService;
 
     @GetMapping("/ping")
     public String ping() {
-        return apiConectorService.ping();
+        return apiBackendService.ping();
     }
     
     @GetMapping("/version")
-    public BuildInfoDTO getPropuestas() {
-        return apiConectorService.version();
+    public BuildInfoDTO version() {
+        return apiBackendService.version();
     }
     /*
     @GetMapping("/reason")

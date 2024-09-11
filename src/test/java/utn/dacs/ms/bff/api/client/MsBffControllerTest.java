@@ -26,47 +26,25 @@ class MsBffControllerTest extends BaseIntegrationTest {
 				.perform(MockMvcRequestBuilders.get(this.baseUrl + "ping").contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(content().string("Hello from RUS MS PORTAL PROVEEDORES BFF ping"));
-	}
-/*
-	@Test
-	void whenVersionIsOk() throws Exception {
-		MvcResult result = null;
-		result = this.mockMvc
-		.perform(MockMvcRequestBuilders.get(this.baseUrl + "version").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isOk()).andReturn();
-
-		BuildInfoDTO buildResult = mapper.readValue(result.getResponse().getContentAsString(), BuildInfoDTO.class);
-
-		assertThat(buildResult).hasFieldOrPropertyWithValue("applicationName", "ms-portalproveedores-bff");
+				.andExpect(content().string("Hello from DACS MS BFF ping"));
 	}
 	
-	*/
-	
 	@Test
-	void shouldReturnCrmPingOk() throws Exception {
+	void shouldReturnConectorPingOk() throws Exception {
 		this.mockMvc
-				.perform(MockMvcRequestBuilders.get(this.baseUrl + "crm/ping").contentType(MediaType.APPLICATION_JSON)
+				.perform(MockMvcRequestBuilders.get(this.baseUrl + "conector/ping").contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(content().string("Hello from RUS API-CRM - ping"));
+				.andExpect(content().string("Hello from DACS MS CONECTOR ping"));
 	}
 	
-	/*
-	 * @Test
-	 
-	void whenCrmVersionIsOk() throws Exception {
-		MvcResult result = null;
-		result = this.mockMvc
-		.perform(MockMvcRequestBuilders.get(this.baseUrl + "crm/version").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isOk()).andReturn();
-
-		BuildInfoDTO buildResult = mapper.readValue(result.getResponse().getContentAsString(), BuildInfoDTO.class);
-
-		assertThat(buildResult).hasFieldOrPropertyWithValue("applicationName", "rus-api-crm");
+	@Test
+	void shouldReturnBackendPingOk() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get(this.baseUrl + "backend/ping").contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(content().string("Hello from DACS MS BACKEND ping"));
 	}
-	*/
 	
 }

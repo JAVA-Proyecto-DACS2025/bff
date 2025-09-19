@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.dacs</groupId>
-	<artifactId>bff</artifactId>
+	<artifactId>dacs-bff</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bff</name>
+	<name>dacs-bff</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

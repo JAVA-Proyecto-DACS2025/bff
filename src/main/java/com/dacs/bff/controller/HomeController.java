@@ -1,14 +1,12 @@
 package com.dacs.bff.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dacs.bff.dto.ItemDto;
+import com.dacs.bff.ApplicationContextProvider;
+import com.dacs.bff.service.ApiBackendService;
 import com.dacs.bff.service.ApiConectorService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +19,12 @@ public class HomeController {
 	@Autowired
 	private ApiConectorService apiConectorService;
 	
+	@Autowired
+	private ApiBackendService apiBackendService;
+	
 	@GetMapping(value = "/")
     public Object root() {
-		log.info("Ingrese a homecontroller 7");
+		log.info("Ingrese a homecontroller");
 		return "Hola desde MS bff de DACS";
 	}
 	
@@ -33,6 +34,12 @@ public class HomeController {
 		return "Hola desde MS bff de DACS PONG";
 	}
 	
+
+	@GetMapping(value = "/version")
+    public Object version() {
+        return ApplicationContextProvider.getApplicationContext().getBean("buildInfo");
+    }
+	
 	
 	@GetMapping(value = "/conectorping")
     public Object conectorPing() {
@@ -40,24 +47,12 @@ public class HomeController {
 		return apiConectorService.ping();
 	}
 	
-	@GetMapping(value = "/items")
-    public List<ItemDto> items() {
-		log.info("Ingrese a homecontroller conector ping");
-		return apiConectorService.items();
+	@GetMapping(value = "/backendping")
+    public Object backendPing() {
+		log.info("Ingrese a homecontroller backend ping");
+		return apiBackendService.ping();
 	}
 	
-	
-	@GetMapping(value = "/items/{id}")
-    public  ItemDto getItems(@PathVariable Integer id) {
-		log.info("Ingrese a homecontroller getItems");	
-		try {
-			return apiConectorService.getItemById(id);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	
-	}
+
 }
 	

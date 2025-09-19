@@ -7,6 +7,8 @@ feign:
         loggerLevel: basic
       apiconectorclient:
         url: '${CONECTOR_URL:http://localhost:9002/conector}'
+      apiBackendClient:
+        url: '${MS_BACKEND_URL:http://localhost:9003}/backend'
 
 management:
   endpoints:

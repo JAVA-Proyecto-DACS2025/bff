@@ -5,7 +5,6 @@ import java.util.List;
 import com.dacs.bff.dto.ItemDto;
 
 public interface ApiConectorService {
-
 	
 	public String ping();
 	

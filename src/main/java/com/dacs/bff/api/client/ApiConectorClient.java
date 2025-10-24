@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.dacs.bff.config.FeignConfig;
 import com.dacs.bff.dto.ItemDto;
 
 @FeignClient(
 		name = "apiConectorClient", 
-		url = "${feign.client.config.apiconectorclient.url}"
+		url = "${feign.client.config.apiconectorclient.url}",
+		configuration = FeignConfig.class
 		)
 public interface ApiConectorClient {
 

@@ -1,3 +1,10 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8080/auth/realms/dacs}
+
 feign:
   client:
     config:
@@ -16,7 +23,14 @@ management:
       base-path: /metrics
       exposure:
         include: "health,info"
+
+logging:
+  level:
+    "[org.springframework.security]": DEBUG
+    "[org.springframework.security.oauth2]": DEBUG
+    "[com.dacs.bff.config.JwtTokenInterceptor]": DEBUG
+
 server:
-  port :  9001
+  port: 9001
   servlet:
     contextPath: /bff

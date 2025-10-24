@@ -10,14 +10,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.dacs.bff.config.FeignConfig;
 import com.dacs.bff.dto.AlumnoDto;
 import com.dacs.bff.dto.BuildInfoDTO;
 
 
 @FeignClient(
-			name = "apiBackendClient", 
-			url = "${feign.client.config.apiBackendClient.url}"
-			)
+		name = "apiBackendClient", 
+		url = "${feign.client.config.apiBackendClient.url}",
+		configuration = FeignConfig.class
+		)
 
 public interface ApiBackendClient {
 

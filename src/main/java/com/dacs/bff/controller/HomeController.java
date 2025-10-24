@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dacs.bff.ApplicationContextProvider;
 import com.dacs.bff.service.ApiBackendService;
 import com.dacs.bff.service.ApiConectorService;
-import com.dacs.bff.ApplicationContextProvider;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,12 +34,10 @@ public class HomeController {
 		return "Hola desde MS bff de DACS PONG";
 	}
 	
-
 	@GetMapping(value = "/version")
     public Object version() {
         return ApplicationContextProvider.getApplicationContext().getBean("buildInfo");
     }
-	
 	
 	@GetMapping(value = "/conectorping")
     public Object conectorPing() {
@@ -53,7 +50,4 @@ public class HomeController {
 		log.info("Ingrese a homecontroller backend ping");
 		return apiBackendService.ping();
 	}
-	
-
 }
-	

@@ -16,5 +16,4 @@ public interface ApiBackendService {
 
 	public AlumnoDto updateAlumno(AlumnoDto alumno) throws Exception;
 
-	public AlumnoDto deleteAlumno(Long id) throws Exception;
 }

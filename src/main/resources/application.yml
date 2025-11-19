@@ -16,6 +16,10 @@ feign:
         url: '${MS_CONECTOR_URL:http://localhost:9002/conector}'
       apiBackendClient:
         url: '${MS_BACKEND_URL:http://localhost:9003/backend}'
+      apiBackendPacientesClient:
+        url: '${MS_BACKEND_URL:http://localhost:9003/backend}'
+      apiBackendCirugiasClient:
+        url: '${MS_BACKEND_URL:http://localhost:9003/backend}'
 
 management:
   endpoints:

@@ -56,11 +56,4 @@ public class AlumnoController {
 		AlumnoDto data = apiBackendService.updateAlumno(alumnoDto);
 		return new ResponseEntity<AlumnoDto>(data, HttpStatus.OK);
 	}
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<AlumnoDto> delete(@PathVariable Long id) throws Exception {
-		log.info("Eliminando alumno con ID: {} - requiere ROLE-A", id);
-		AlumnoDto data = apiBackendService.deleteAlumno(id);
-		return new ResponseEntity<AlumnoDto>(data, HttpStatus.OK);
-	}
 }

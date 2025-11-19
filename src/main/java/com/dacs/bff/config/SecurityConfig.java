@@ -25,43 +25,60 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
 	// Bean para configurar CORS globalmente. (No se modifica)
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration config = new CorsConfiguration();
+	// @Bean
+	// public CorsConfigurationSource corsConfigurationSource() {
+	// 	UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	// 	CorsConfiguration config = new CorsConfiguration();
 		
-		config.setAllowCredentials(true);
+	// 	config.setAllowCredentials(true);
 		
-		config.setAllowedOriginPatterns(Arrays.asList(
-			"http://localhost:9001",
-			"http://localhost:4200",
-			"http://localhost:3000",
-			"https://dacs2025.local",
-			"https://*.dacs2025.local"
-		));
+	// 	config.setAllowedOriginPatterns(Arrays.asList(
+	// 		"http://localhost:9001",
+	// 		"http://localhost:4200",
+	// 		"http://localhost:3000",
+	// 		"https://dacs2025.local",
+	// 		"https://*.dacs2025.local"
+	// 	));
 		
-		config.setAllowedHeaders(Arrays.asList(
-			"Authorization",
-			"Content-Type",
-			"X-Requested-With",
-			"Accept",
-			"Origin",
-			"Access-Control-Request-Method",
-			"Access-Control-Request-Headers"
-		));
+	// 	config.setAllowedHeaders(Arrays.asList(
+	// 		"Authorization",
+	// 		"Content-Type",
+	// 		"X-Requested-With",
+	// 		"Accept",
+	// 		"Origin",
+	// 		"Access-Control-Request-Method",
+	// 		"Access-Control-Request-Headers"
+	// 	));
 		
-		config.setExposedHeaders(Arrays.asList(
-			"Access-Control-Allow-Origin",
-			"Access-Control-Allow-Credentials"
-		));
+	// 	config.setExposedHeaders(Arrays.asList(
+	// 		"Access-Control-Allow-Origin",
+	// 		"Access-Control-Allow-Credentials"
+	// 	));
 		
-		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+	// 	config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 		
-		config.setMaxAge(3600L);
+	// 	config.setMaxAge(3600L);
 		
-		source.registerCorsConfiguration("/**", config);
-		return source;
-	}
+	// 	source.registerCorsConfiguration("/**", config);
+	// 	return source;
+	// }
+
+	@Bean    //PERMITIR DESDE CUALQUIER ORIGEN
+public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration();
+    
+    config.setAllowedOrigins(Arrays.asList("*"));   // Permite cualquier origen
+    config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+    config.setAllowedHeaders(Arrays.asList("*"));   // Permite todos los headers
+    config.setExposedHeaders(Arrays.asList("*"));
+    config.setAllowCredentials(false);              // 🚨 Obligatorio si usás "*"
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+
+    return source;
+}
+
 
 	// 💥 MÉTODO CORREGIDO para extraer los roles de Keycloak.
 	@Bean
@@ -119,6 +136,8 @@ public class SecurityConfig {
 				.requestMatchers("/error").permitAll()
 				.requestMatchers("/ping", "/version").permitAll()
 				.requestMatchers("/conectorping", "/backendping").permitAll()
+				.requestMatchers("/cirugia/**").permitAll()  //borrar despues
+				
 				
 				// Endpoints que requieren autenticación
 				.requestMatchers("/secure/**").authenticated()

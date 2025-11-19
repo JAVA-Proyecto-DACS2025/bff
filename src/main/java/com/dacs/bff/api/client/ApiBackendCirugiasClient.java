@@ -13,15 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.dacs.bff.config.FeignConfig;
 import com.dacs.bff.dto.AlumnoDto;
 import com.dacs.bff.dto.BuildInfoDTO;
+import com.dacs.bff.dto.CirugiaDTO;
 
 
 @FeignClient(
-		name = "apiBackendClient", 
-		url = "${feign.client.config.apiBackendClient.url}",
+		name = "apiBackendCirugiasClient", 
+		url = "${feign.client.config.apiBackendCirugiasClient.url}",
 		configuration = FeignConfig.class
 		)
 
-public interface ApiBackendClient {
+public interface ApiBackendCirugiasClient {
 
     @GetMapping("/ping")
     String ping();
@@ -41,6 +42,16 @@ public interface ApiBackendClient {
     @PutMapping("/alumno")
     AlumnoDto update(@RequestBody AlumnoDto alumno);
     
-    @DeleteMapping("/alumno/{id}")
-    AlumnoDto delete(@PathVariable("id") Long id);
+
+    @GetMapping("/cirugia")
+    List<com.dacs.bff.dto.CirugiaDTO> cirugias();
+
+    @PostMapping("/cirugia")
+    CirugiaDTO save(@RequestBody CirugiaDTO cirugia);
+
+    @PutMapping("/cirugia")
+    CirugiaDTO update(@RequestBody CirugiaDTO cirugia);
+
+    @DeleteMapping("/cirugia/{id}")
+    CirugiaDTO delete(@PathVariable("id") Long id);
 }

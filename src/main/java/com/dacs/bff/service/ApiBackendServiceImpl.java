@@ -5,14 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dacs.bff.api.client.ApiBackendClient;
+import com.dacs.bff.api.client.ApiBackendCirugiasClient;
 import com.dacs.bff.dto.AlumnoDto;
 
 @Service
 public class ApiBackendServiceImpl implements ApiBackendService{
 
 	@Autowired
-	private ApiBackendClient apiBackendClient;
+	private ApiBackendCirugiasClient apiBackendClient;
 	
 	@Override
 	public String ping() {
@@ -42,13 +42,4 @@ public class ApiBackendServiceImpl implements ApiBackendService{
 		//TODO validar parametro y lanzar exepcion
 		return apiBackendClient.update(alumno);
 	}
-
-	@Override
-	public AlumnoDto deleteAlumno(Long id) throws Exception {
-		//TODO validar parametro y lanzar exepcion
-		return apiBackendClient.delete(id);
-	}
-
-
-
 }

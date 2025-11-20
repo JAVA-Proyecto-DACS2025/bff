@@ -80,7 +80,7 @@ public CorsConfigurationSource corsConfigurationSource() {
 }
 
 
-	// 💥 MÉTODO CORREGIDO para extraer los roles de Keycloak.
+	//  MÉTODO CORREGIDO para extraer los roles de Keycloak.
 	@Bean
 	public JwtAuthenticationConverter jwtAuthenticationConverter() {
 		JwtAuthenticationConverter converter = new JwtAuthenticationConverter();

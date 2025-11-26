@@ -33,7 +33,7 @@ public class CirugiaController {
     } 
 
     @PostMapping("")
-    public ResponseEntity<CirugiaDTO> create (@RequestBody CirugiaDTO cirugiaDTO) throws Exception {
+    public ResponseEntity<CirugiaDTO> save (@RequestBody CirugiaDTO cirugiaDTO) throws Exception {
         log.info("Creando nueva cirugia");
         CirugiaDTO data = cirugiaService.saveCirugia(cirugiaDTO);
         return new ResponseEntity<>(data, HttpStatus.CREATED);

@@ -31,7 +31,11 @@ public class ApiBackendPacienteServiceImpl implements ApiBackendPacienteService 
 
     @Override
     public List<PacienteDto> getPacientes() {
-        return apiBackendPacienteClient.pacientes();
+        return apiBackendPacienteClient.pacientes(null);
     }
 
+    @Override
+    public List<PacienteDto> getPacientes(String search) {
+        return apiBackendPacienteClient.pacientes(search);
+    }
 }

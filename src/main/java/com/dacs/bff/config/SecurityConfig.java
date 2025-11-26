@@ -63,7 +63,7 @@ public class SecurityConfig {
 	// 	return source;
 	// }
 
-	@Bean    //PERMITIR DESDE CUALQUIER ORIGEN
+	@Bean    //PERMITIR DESDE CUALQUIER ORIGEN   (Para usar desde Postman o frontends en otros orígenes)
 public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
     
@@ -137,6 +137,7 @@ public CorsConfigurationSource corsConfigurationSource() {
 				.requestMatchers("/ping", "/version").permitAll()
 				.requestMatchers("/conectorping", "/backendping").permitAll()
 				.requestMatchers("/cirugia/**").permitAll()  //borrar despues
+				.requestMatchers("/paciente/**").permitAll()  //borrar despues
 				
 				
 				// Endpoints que requieren autenticación

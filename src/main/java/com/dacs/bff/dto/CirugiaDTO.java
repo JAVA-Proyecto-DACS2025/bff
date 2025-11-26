@@ -14,6 +14,7 @@ public class CirugiaDTO {
     private LocalDateTime fecha_hora_inicio;
     private String estado;
     private String anestesia;
+    private String tipo;
     private Long pacienteId;    
     private Long quirofanoId;
 }

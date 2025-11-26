@@ -32,7 +32,7 @@ public class AuthController {
             // Spring no puede acceder a claims anidados con .getClaimAsStringList()
             if (jwt.hasClaim("realm_access")) {
                 // Obtenemos el mapa 'realm_access'
-                @SuppressWarnings("unchecked")
+                @SuppressWarnings("")
                 Map<String, Object> realmAccess = jwt.getClaimAsMap("realm_access");
                 
                 // Si el mapa existe y contiene la clave 'roles', extraemos la lista

@@ -6,7 +6,7 @@ import com.dacs.bff.dto.CirugiaDTO;
 
 public interface ApiBackendCirugiaService {
 
-    public List<CirugiaDTO> getCirugias();
+    public com.dacs.bff.dto.CirugiaPageResponse getCirugias(Integer page, Integer size);
 
     public CirugiaDTO saveCirugia(CirugiaDTO cirugia) throws Exception;
 

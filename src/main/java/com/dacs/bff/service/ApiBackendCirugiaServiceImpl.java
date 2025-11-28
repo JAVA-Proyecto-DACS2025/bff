@@ -1,6 +1,8 @@
 package com.dacs.bff.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,8 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService{
 	
 	
 	@Override
-	public List<CirugiaDTO> getCirugias() {
-		// TODO Auto-generated method stub
-		return apiBackendClient.cirugias();
+	public com.dacs.bff.dto.CirugiaPageResponse getCirugias(Integer page, Integer size) {
+		return apiBackendClient.cirugias(page, size);
 	}
 
 	@Override
@@ -40,3 +41,4 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService{
 		return apiBackendClient.delete(id);
 	}
 }
+

@@ -45,11 +45,11 @@ public interface ApiBackendCirugiasClient {
             @RequestParam(name = "size", required = false) Integer size);
 
     @PostMapping("/cirugia")
-    CirugiaRequestDTO save(@RequestBody CirugiaRequestDTO cirugia);
+    CirugiaResponseDTO save(@RequestBody CirugiaRequestDTO cirugia);
 
     @PutMapping("/cirugia")
-    CirugiaRequestDTO update(@RequestBody CirugiaRequestDTO cirugia);
+    CirugiaResponseDTO update(@RequestBody CirugiaRequestDTO cirugia);
 
     @DeleteMapping("/cirugia/{id}")
-    CirugiaRequestDTO delete(@PathVariable("id") Long id);
+    CirugiaResponseDTO delete(@PathVariable("id") Long id);
 }

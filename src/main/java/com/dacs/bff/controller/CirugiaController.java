@@ -59,9 +59,9 @@ public class CirugiaController {
     }
 
     @PostMapping("")
-    public ResponseEntity<CirugiaRequestDTO> save (@RequestBody CirugiaRequestDTO cirugiaDTO) throws Exception {
+    public ResponseEntity<CirugiaResponseDTO> save (@RequestBody CirugiaRequestDTO cirugiaDTO) throws Exception {
         log.info("Creando nueva cirugia");
-        CirugiaRequestDTO data = cirugiaService.saveCirugia(cirugiaDTO);
+        CirugiaResponseDTO data = cirugiaService.saveCirugia(cirugiaDTO);
         return new ResponseEntity<>(data, HttpStatus.CREATED);
     }
 }

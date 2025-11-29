@@ -10,9 +10,9 @@ public interface ApiBackendCirugiaService {
 
     public PaginatedResponse<CirugiaResponseDTO> getCirugias(Integer page, Integer size);
 
-    public CirugiaRequestDTO saveCirugia(CirugiaRequestDTO cirugia) throws Exception;
+    public CirugiaResponseDTO saveCirugia(CirugiaRequestDTO cirugia) throws Exception;
 
-    public CirugiaRequestDTO updateCirugia(CirugiaRequestDTO cirugia) throws Exception;
+    public CirugiaResponseDTO updateCirugia(CirugiaRequestDTO cirugia) throws Exception;
 
-    public CirugiaRequestDTO deleteCirugia(Long id) throws Exception;
+    public CirugiaResponseDTO deleteCirugia(Long id) throws Exception;
 }

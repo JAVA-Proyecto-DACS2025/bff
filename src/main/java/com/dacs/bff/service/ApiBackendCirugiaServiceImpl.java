@@ -25,19 +25,19 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService{
 	}
 
 	@Override
-	public CirugiaRequestDTO saveCirugia(CirugiaRequestDTO cirugia) throws Exception {
+	public CirugiaResponseDTO saveCirugia(CirugiaRequestDTO cirugia) throws Exception {
 		//TODO validar parametro y lanzar exepcion
 		return apiBackendClient.save(cirugia);
 	}
 
 	@Override
-	public CirugiaRequestDTO updateCirugia(CirugiaRequestDTO cirugia) throws Exception {
+	public CirugiaResponseDTO updateCirugia(CirugiaRequestDTO cirugia) throws Exception {
 		//TODO validar parametro y lanzar exepcion
 		return apiBackendClient.update(cirugia);
 	}
 
 	@Override
-	public CirugiaRequestDTO deleteCirugia(Long id) throws Exception {
+	public CirugiaResponseDTO deleteCirugia(Long id) throws Exception {
 		//TODO validar parametro y lanzar exepcion
 		return apiBackendClient.delete(id);
 	}

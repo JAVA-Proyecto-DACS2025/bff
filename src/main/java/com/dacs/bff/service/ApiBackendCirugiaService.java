@@ -2,15 +2,17 @@ package com.dacs.bff.service;
 
 import java.util.List;
 
-import com.dacs.bff.dto.CirugiaDTO;
+import com.dacs.bff.dto.CirugiaRequestDTO;
+import com.dacs.bff.dto.CirugiaResponseDTO;
+import com.dacs.bff.dto.PaginatedResponse;
 
 public interface ApiBackendCirugiaService {
 
-    public com.dacs.bff.dto.CirugiaPageResponse getCirugias(Integer page, Integer size);
+    public PaginatedResponse<CirugiaResponseDTO> getCirugias(Integer page, Integer size);
 
-    public CirugiaDTO saveCirugia(CirugiaDTO cirugia) throws Exception;
+    public CirugiaRequestDTO saveCirugia(CirugiaRequestDTO cirugia) throws Exception;
 
-    public CirugiaDTO updateCirugia(CirugiaDTO cirugia) throws Exception;
+    public CirugiaRequestDTO updateCirugia(CirugiaRequestDTO cirugia) throws Exception;
 
-    public CirugiaDTO deleteCirugia(Long id) throws Exception;
+    public CirugiaRequestDTO deleteCirugia(Long id) throws Exception;
 }

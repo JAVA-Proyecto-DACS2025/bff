@@ -1,15 +1,15 @@
 package com.dacs.bff.service;
 
-import com.dacs.bff.dto.QuirofanoDTO;
+import com.dacs.bff.dto.QuirofanoDto;
 
 import java.util.List;
 
 public interface ApiBackendQuirofanoService {
-    public List<QuirofanoDTO> getQuirofanos();
+    public List<QuirofanoDto> getQuirofanos();
     
-    public QuirofanoDTO saveQuirofano(QuirofanoDTO quirofano) throws Exception;
+    public QuirofanoDto saveQuirofano(QuirofanoDto quirofano) throws Exception;
 
-    public QuirofanoDTO updateQuirofano(QuirofanoDTO quirofano) throws Exception;
+    public QuirofanoDto updateQuirofano(QuirofanoDto quirofano) throws Exception;
     
-    public QuirofanoDTO deleteQuirofano(Long id) throws Exception;
+    public QuirofanoDto deleteQuirofano(Long id) throws Exception;
 }

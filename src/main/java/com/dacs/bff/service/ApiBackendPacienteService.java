@@ -6,8 +6,7 @@ import com.dacs.bff.dto.PacienteDto;
 
 public interface ApiBackendPacienteService {
 
-    public List<PacienteDto> getPacientes();
-    public List<PacienteDto> getPacientes(String search);
+    public List<PacienteDto> getPacientes(List<Long> ids);
 
     public PacienteDto savePaciente(PacienteDto paciente) throws Exception;
 

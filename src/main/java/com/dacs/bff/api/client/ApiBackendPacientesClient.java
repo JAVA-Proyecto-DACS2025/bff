@@ -23,7 +23,7 @@ import com.dacs.bff.dto.PacienteDto;
 public interface ApiBackendPacientesClient {
 
     @GetMapping("/pacient")
-    List<com.dacs.bff.dto.PacienteDto> pacientes(@RequestParam(name = "search", required = false) String search);
+    List<PacienteDto> pacientes(@RequestParam(name = "search", required = false) List<Long> pacienteIds);
 
     @PostMapping("/pacient")
     PacienteDto save(@RequestBody PacienteDto paciente);

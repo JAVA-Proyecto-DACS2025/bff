@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.dacs.bff.config.FeignConfig;
-import com.dacs.bff.dto.QuirofanoDTO;
+import com.dacs.bff.dto.QuirofanoDto;
 
 @FeignClient(
 		name = "apiBackendQuirofanoClient", 
@@ -23,15 +23,15 @@ import com.dacs.bff.dto.QuirofanoDTO;
 public interface ApiBackendQuirofanoClient {
 
     @GetMapping("/quirofano")
-    List<QuirofanoDTO> quirofanos();
+    List<QuirofanoDto> quirofanos();
 
     @PostMapping("/quirofano")
-    QuirofanoDTO save(@RequestBody QuirofanoDTO quirofano);
+    QuirofanoDto save(@RequestBody QuirofanoDto quirofano);
     
     @PutMapping("/quirofano")
-    QuirofanoDTO update(@RequestBody QuirofanoDTO quirofano);
+    QuirofanoDto update(@RequestBody QuirofanoDto quirofano);
 
     @DeleteMapping("/quirofano/{id}")
-    QuirofanoDTO delete(@PathVariable("id") Long id);
+    QuirofanoDto delete(@PathVariable("id") Long id);
 }
 

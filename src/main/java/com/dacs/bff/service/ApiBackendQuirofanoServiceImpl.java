@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dacs.bff.api.client.ApiBackendQuirofanoClient;
-import com.dacs.bff.dto.QuirofanoDTO;
+import com.dacs.bff.dto.QuirofanoDto;
 
 
 @Service
@@ -15,22 +15,22 @@ public class ApiBackendQuirofanoServiceImpl implements ApiBackendQuirofanoServic
     private ApiBackendQuirofanoClient apiBackendQuirofanoClient;
 
     @Override
-    public QuirofanoDTO saveQuirofano(QuirofanoDTO quirofano) throws Exception {
+    public QuirofanoDto saveQuirofano(QuirofanoDto quirofano) throws Exception {
         return apiBackendQuirofanoClient.save(quirofano);
     }
 
     @Override
-    public QuirofanoDTO updateQuirofano(QuirofanoDTO quirofano) throws Exception {
+    public QuirofanoDto updateQuirofano(QuirofanoDto quirofano) throws Exception {
         return apiBackendQuirofanoClient.update(quirofano);
     }
     
     @Override
-    public QuirofanoDTO deleteQuirofano(Long id) throws Exception {
+    public QuirofanoDto deleteQuirofano(Long id) throws Exception {
         return apiBackendQuirofanoClient.delete(id);
     }
 
     @Override
-    public List<QuirofanoDTO> getQuirofanos() {
+    public List<QuirofanoDto> getQuirofanos() {
         return apiBackendQuirofanoClient.quirofanos();
     }
 

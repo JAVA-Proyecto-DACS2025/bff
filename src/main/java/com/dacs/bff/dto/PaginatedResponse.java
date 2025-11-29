@@ -2,15 +2,15 @@ package com.dacs.bff.dto;
 
 import java.util.List;
 
-public class CirugiaPageResponse {
-    private List<CirugiaDTO> content;
+public class PaginatedResponse<T> {
+    private List<T> content;
     private long totalElements;
     private int totalPages;
     private int number;
     private int size;
 
-    public List<CirugiaDTO> getContent() { return content; }
-    public void setContent(List<CirugiaDTO> content) { this.content = content; }
+    public List<T> getContent() { return content; }
+    public void setContent(List<T> content) { this.content = content; }
 
     public long getTotalElements() { return totalElements; }
     public void setTotalElements(long totalElements) { this.totalElements = totalElements; }

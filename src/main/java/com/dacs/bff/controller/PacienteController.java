@@ -8,6 +8,7 @@ import com.dacs.bff.service.ApiBackendPacienteService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,8 +31,21 @@ public class PacienteController {
     @GetMapping("")
     public ResponseEntity<List<PacienteDto>> getAll(@RequestParam(name = "search", required = false) String search) {
         log.info("Obteniendo lista de pacientes (search={})", search);
-        List<PacienteDto> data = pacienteService.getPacientes(search);
-        return new ResponseEntity<>(data, HttpStatus.OK);
+
+        // obtener todos desde el servicio (el servicio actual acepta List<Long> ids; pasamos null para obtener todos)
+        List<PacienteDto> data = pacienteService.getPacientes((List<Long>) null);
+
+        if (search == null || search.isBlank()) {
+            return new ResponseEntity<>(data, HttpStatus.OK);
+        }
+
+        String s = search.toLowerCase();
+        List<PacienteDto> filtered = data.stream()
+                .filter(p -> (p.getNombre() != null && p.getNombre().toLowerCase().contains(s))
+                        || (p.getDni() != null && p.getDni().toLowerCase().contains(s)))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(filtered, HttpStatus.OK);
     }
 
     @PostMapping("")

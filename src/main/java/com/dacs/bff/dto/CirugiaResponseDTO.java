@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CirugiaDTO {
+public class CirugiaResponseDTO {
     private Long id;
     private String servicio;
     private String prioridad;
@@ -15,6 +15,7 @@ public class CirugiaDTO {
     private String estado;
     private String anestesia;
     private String tipo;
-    private Long pacienteId;    
-    private Long quirofanoId;
+    private PacienteDto paciente;
+    private QuirofanoDto quirofano;
 }
+

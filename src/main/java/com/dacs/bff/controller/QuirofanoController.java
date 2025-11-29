@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dacs.bff.dto.QuirofanoDTO;
+import com.dacs.bff.dto.QuirofanoDto;
 import com.dacs.bff.service.ApiBackendQuirofanoService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,16 +24,16 @@ public class QuirofanoController {
     @Autowired
     private ApiBackendQuirofanoService quirofanoService;
     @GetMapping("")
-    public ResponseEntity<List<QuirofanoDTO>> getAll() {
+    public ResponseEntity<List<QuirofanoDto>> getAll() {
         log.info("Obteniendo lista de quirofanos");
-        List<QuirofanoDTO> data = quirofanoService.getQuirofanos();
+        List<QuirofanoDto> data = quirofanoService.getQuirofanos();
         return new ResponseEntity<>(data, HttpStatus.OK);
     } 
 
     @PostMapping("")
-    public ResponseEntity<QuirofanoDTO> create (@RequestBody QuirofanoDTO quirofanoDto) throws Exception {
+    public ResponseEntity<QuirofanoDto> create (@RequestBody QuirofanoDto quirofanoDto) throws Exception {
         log.info("Creando nuevo quirofano");
-        QuirofanoDTO data = quirofanoService.saveQuirofano(quirofanoDto);
+        QuirofanoDto data = quirofanoService.saveQuirofano(quirofanoDto);
         return new ResponseEntity<>(data, HttpStatus.CREATED);
     }
 }

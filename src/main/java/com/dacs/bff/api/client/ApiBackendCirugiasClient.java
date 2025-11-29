@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.dacs.bff.config.FeignConfig;
 import com.dacs.bff.dto.AlumnoDto;
 import com.dacs.bff.dto.BuildInfoDTO;
-import com.dacs.bff.dto.CirugiaDTO;
-import com.dacs.bff.dto.CirugiaPageResponse;
+import com.dacs.bff.dto.CirugiaRequestDTO;
+import com.dacs.bff.dto.CirugiaResponseDTO;
+import com.dacs.bff.dto.PaginatedResponse;
 
 @FeignClient(name = "apiBackendCirugiasClient", url = "${feign.client.config.apiBackendCirugiasClient.url}", configuration = FeignConfig.class)
 
@@ -40,15 +41,15 @@ public interface ApiBackendCirugiasClient {
     AlumnoDto update(@RequestBody AlumnoDto alumno);
 
     @GetMapping("/cirugia")
-    CirugiaPageResponse cirugias(@RequestParam(name = "page", required = false) Integer page,
+    PaginatedResponse<CirugiaResponseDTO> cirugias(@RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size);
 
     @PostMapping("/cirugia")
-    CirugiaDTO save(@RequestBody CirugiaDTO cirugia);
+    CirugiaRequestDTO save(@RequestBody CirugiaRequestDTO cirugia);
 
     @PutMapping("/cirugia")
-    CirugiaDTO update(@RequestBody CirugiaDTO cirugia);
+    CirugiaRequestDTO update(@RequestBody CirugiaRequestDTO cirugia);
 
     @DeleteMapping("/cirugia/{id}")
-    CirugiaDTO delete(@PathVariable("id") Long id);
+    CirugiaRequestDTO delete(@PathVariable("id") Long id);
 }

@@ -22,6 +22,8 @@ feign:
         url: '${MS_BACKEND_URL:http://localhost:9003/backend}'
       apiBackendQuirofanoClient:
         url: '${MS_BACKEND_URL:http://localhost:9003/backend}'
+      apiBackendPersonalClient:
+        url: '${MS_BACKEND_URL:http://localhost:9003/backend}'
 
 management:
   endpoints:

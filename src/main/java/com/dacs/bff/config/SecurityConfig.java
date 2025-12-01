@@ -138,6 +138,7 @@ public CorsConfigurationSource corsConfigurationSource() {
 				.requestMatchers("/conectorping", "/backendping").permitAll()
 				.requestMatchers("/cirugia/**").permitAll()  //borrar despues
 				.requestMatchers("/paciente/**").permitAll()  //borrar despues
+				.requestMatchers("/personal/**").permitAll()  //borrar despues
 				
 				
 				// Endpoints que requieren autenticación

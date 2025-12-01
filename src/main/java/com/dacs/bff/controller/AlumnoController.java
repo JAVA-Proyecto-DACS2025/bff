@@ -28,31 +28,31 @@ public class AlumnoController {
 	@Autowired
 	private ApiBackendService apiBackendService;
 
-	@GetMapping("")
-	public ResponseEntity<List<AlumnoDto>> getAll() {
-		log.info("Obteniendo lista de alumnos - requiere ROLE-A");
-		List<AlumnoDto> data = apiBackendService.getAlumnos();
-		return new ResponseEntity<List<AlumnoDto>>(data, HttpStatus.OK);
-	}
+	// @GetMapping("")
+	// public ResponseEntity<List<AlumnoDto>> getAll() {
+	// 	log.info("Obteniendo lista de alumnos - requiere ROLE-A");
+	// 	List<AlumnoDto> data = apiBackendService.getAlumnos();
+	// 	return new ResponseEntity<List<AlumnoDto>>(data, HttpStatus.OK);
+	// }
 
-	@GetMapping("/{id}")
-	public ResponseEntity<AlumnoDto> getById(@PathVariable(value = "id") Long id) throws Exception {
-		log.info("Obteniendo alumno con ID: {} - requiere ROLE-A", id);
-		AlumnoDto data = apiBackendService.getAlumnoById(id);
-		return new ResponseEntity<AlumnoDto>(data, HttpStatus.OK);
-	}
+	// @GetMapping("/{id}")
+	// public ResponseEntity<AlumnoDto> getById(@PathVariable(value = "id") Long id) throws Exception {
+	// 	log.info("Obteniendo alumno con ID: {} - requiere ROLE-A", id);
+	// 	AlumnoDto data = apiBackendService.getAlumnoById(id);
+	// 	return new ResponseEntity<AlumnoDto>(data, HttpStatus.OK);
+	// }
 
-	@PostMapping("")
-	public ResponseEntity<AlumnoDto> create(@RequestBody AlumnoDto alumnoDto) throws Exception {
-		log.info("Creando nuevo alumno - requiere ROLE-A");
-		AlumnoDto data = apiBackendService.savesAlumno(alumnoDto);
-		return new ResponseEntity<AlumnoDto>(data, HttpStatus.OK);
-	}
+	// @PostMapping("")
+	// public ResponseEntity<AlumnoDto> create(@RequestBody AlumnoDto alumnoDto) throws Exception {
+	// 	log.info("Creando nuevo alumno - requiere ROLE-A");
+	// 	AlumnoDto data = apiBackendService.savesAlumno(alumnoDto);
+	// 	return new ResponseEntity<AlumnoDto>(data, HttpStatus.OK);
+	// }
 
-	@PutMapping("")
-	public ResponseEntity<AlumnoDto> update(@RequestBody AlumnoDto alumnoDto) throws Exception {
-		log.info("Actualizando alumno con ID: {} - requiere ROLE-A", alumnoDto.getId());
-		AlumnoDto data = apiBackendService.updateAlumno(alumnoDto);
-		return new ResponseEntity<AlumnoDto>(data, HttpStatus.OK);
-	}
+	// @PutMapping("")
+	// public ResponseEntity<AlumnoDto> update(@RequestBody AlumnoDto alumnoDto) throws Exception {
+	// 	log.info("Actualizando alumno con ID: {} - requiere ROLE-A", alumnoDto.getId());
+	// 	AlumnoDto data = apiBackendService.updateAlumno(alumnoDto);
+	// 	return new ResponseEntity<AlumnoDto>(data, HttpStatus.OK);
+	// }
 }

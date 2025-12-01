@@ -18,28 +18,4 @@ public class ApiBackendServiceImpl implements ApiBackendService{
 	public String ping() {
 		return apiBackendClient.ping();
 	}
-
-	@Override
-	public AlumnoDto getAlumnoById(Long id) throws Exception {
-		//TODO validar parametro y lanzar exepcion
-		return apiBackendClient.alumnoById(id);
-	}
-
-	@Override
-	public List<AlumnoDto> getAlumnos() {
-		// TODO Auto-generated method stub
-		return apiBackendClient.alumnos();
-	}
-
-	@Override
-	public AlumnoDto savesAlumno(AlumnoDto alumno) throws Exception {
-		//TODO validar parametro y lanzar exepcion
-		return apiBackendClient.save(alumno);
-	}
-
-	@Override
-	public AlumnoDto updateAlumno(AlumnoDto alumno) throws Exception {
-		//TODO validar parametro y lanzar exepcion
-		return apiBackendClient.update(alumno);
-	}
 }

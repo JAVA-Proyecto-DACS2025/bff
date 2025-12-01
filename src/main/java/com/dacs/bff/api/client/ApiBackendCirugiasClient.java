@@ -25,21 +25,6 @@ public interface ApiBackendCirugiasClient {
     @GetMapping("/ping")
     String ping();
 
-    @GetMapping("/version")
-    BuildInfoDTO version();
-
-    @GetMapping("/alumno")
-    List<AlumnoDto> alumnos();
-
-    @GetMapping("/alumno/{id}")
-    AlumnoDto alumnoById(@PathVariable("id") Long id);
-
-    @PostMapping("/alumno")
-    AlumnoDto save(@RequestBody AlumnoDto alumno);
-
-    @PutMapping("/alumno")
-    AlumnoDto update(@RequestBody AlumnoDto alumno);
-
     @GetMapping("/cirugia")
     PaginatedResponse<CirugiaResponseDTO> cirugias(@RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size);

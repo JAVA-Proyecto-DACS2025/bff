@@ -1,12 +1,15 @@
 package com.dacs.bff.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dacs.bff.dto.CirugiaResponseDTO;
+import com.dacs.bff.dto.ApiResponse;
 import com.dacs.bff.dto.CirugiaRequestDTO;
 import com.dacs.bff.dto.PacienteDto;
 import com.dacs.bff.dto.PaginatedResponse;
+import com.dacs.bff.dto.Pagination;
 // import com.dacs.bff.dto.CirugiaPageResponse;
 import com.dacs.bff.service.ApiBackendCirugiaService;
 import com.dacs.bff.service.ApiBackendPacienteService;
@@ -33,20 +36,20 @@ public class CirugiaController {
     private ApiBackendPacienteService pacienteService;
 
     @GetMapping("")
-    public ResponseEntity<com.dacs.bff.dto.ApiResponse<List<CirugiaResponseDTO>>> getAll(
-            @org.springframework.web.bind.annotation.RequestParam(name = "page", required = false) Integer page,
-            @org.springframework.web.bind.annotation.RequestParam(name = "size", required = false) Integer size) {
-        log.info("Obteniendo lista de cirugias (page={}, size={})", page, size);
+    public ResponseEntity<ApiResponse<List<CirugiaResponseDTO>>> getAll(
+            @RequestParam(name = "page", required = false) Integer page,
+            @RequestParam(name = "size", required = false) Integer size) {
         PaginatedResponse<CirugiaResponseDTO> backend = cirugiaService.getCirugias(page, size);
 
-        com.dacs.bff.dto.ApiResponse<java.util.List<CirugiaResponseDTO>> resp = new com.dacs.bff.dto.ApiResponse<>();
+        // Construir ApiResponse con paginación
+        ApiResponse<List<CirugiaResponseDTO>> resp = new ApiResponse<>();
         resp.setSuccess(true);
         resp.setData(backend.getContent());
         resp.setMessage(null);
         resp.setTimestamp(java.time.OffsetDateTime.now().toString());
         resp.setRequestId(java.util.UUID.randomUUID().toString());
 
-        com.dacs.bff.dto.Pagination p = new com.dacs.bff.dto.Pagination();
+        Pagination p = new Pagination();
         p.setPage(backend.getNumber());
         p.setPageSize(backend.getSize());
         p.setTotalItems(backend.getTotalElements());

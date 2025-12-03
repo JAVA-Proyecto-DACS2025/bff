@@ -1,6 +1,9 @@
 package com.dacs.bff.service;
 
+import java.util.List;
+
 import com.dacs.bff.dto.PaginatedResponse;
+import com.dacs.bff.dto.PersonalDto;
 import com.dacs.bff.dto.PersonalRequestDto;
 import com.dacs.bff.dto.PersonalResponseDto;
 
@@ -12,4 +15,6 @@ public interface ApiBackendPersonalService {
     PersonalResponseDto update(Long id,PersonalRequestDto personalRequestDto);
 
     void delete(Long id) throws Exception;
+
+    List<PersonalDto> searchByNombreOrDni(String param);
 }

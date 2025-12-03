@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dacs.bff.dto.ApiResponse;
 import com.dacs.bff.dto.PaginatedResponse;
 import com.dacs.bff.dto.Pagination;
+import com.dacs.bff.dto.PersonalDto;
 import com.dacs.bff.dto.PersonalRequestDto;
 import com.dacs.bff.dto.PersonalResponseDto;
 import com.dacs.bff.service.ApiBackendPersonalService;
@@ -100,4 +101,19 @@ public class PersonalController {
         resp.setRequestId(java.util.UUID.randomUUID().toString());
         return new ResponseEntity<>(resp, HttpStatus.OK);
     }
+
+    @GetMapping("/resumen")
+    public ResponseEntity<ApiResponse<List<PersonalDto>>> searchByNombreOrDni(@RequestParam String param) {
+        List<PersonalDto> results = personalService.searchByNombreOrDni(param);
+
+        ApiResponse<List<PersonalDto>> resp = new ApiResponse<>();
+        resp.setSuccess(true);
+        resp.setData(results);
+        resp.setMessage(null);
+        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
+        resp.setRequestId(java.util.UUID.randomUUID().toString());
+
+        return new ResponseEntity<>(resp, HttpStatus.OK);
+    }
+    
 }

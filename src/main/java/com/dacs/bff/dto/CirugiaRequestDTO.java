@@ -14,8 +14,8 @@ public class CirugiaRequestDTO {
     private String estado;
     private String anestesia;
     private String tipo;
-    private Long pacienteId;    
-    private Long quirofanoId;
+    private Long paciente;    
+    private Long quirofano;
 }
 
 @Getter

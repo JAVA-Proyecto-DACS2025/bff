@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.dacs.bff.config.FeignConfig;
 import com.dacs.bff.dto.PaginatedResponse;
+import com.dacs.bff.dto.PersonalDto;
 import com.dacs.bff.dto.PersonalRequestDto;
 import com.dacs.bff.dto.PersonalResponseDto;
 
@@ -32,6 +33,9 @@ public interface ApiBackendPersonalClient {
 
     @DeleteMapping("/personal/{id}")
     void delete(@PathVariable("id") Long id);
+
+    @GetMapping("/personal/resumen")
+    List<PersonalDto> searchByNombreOrDni(@RequestParam(name = "param", required = false) String param);
 
 
 }

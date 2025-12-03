@@ -4,18 +4,19 @@ import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dacs.bff.config.FeignConfig;
 import com.dacs.bff.dto.AlumnoDto;
 import com.dacs.bff.dto.BuildInfoDTO;
 import com.dacs.bff.dto.CirugiaRequestDTO;
 import com.dacs.bff.dto.CirugiaResponseDTO;
+import com.dacs.bff.dto.MiembroEquipoDTO;
 import com.dacs.bff.dto.PaginatedResponse;
 
 @FeignClient(name = "apiBackendCirugiasClient", url = "${feign.client.config.apiBackendCirugiasClient.url}", configuration = FeignConfig.class)
@@ -32,9 +33,15 @@ public interface ApiBackendCirugiasClient {
     @PostMapping("/cirugia")
     CirugiaResponseDTO save(@RequestBody CirugiaRequestDTO cirugia);
 
-    @PutMapping("/cirugia")
-    CirugiaResponseDTO update(@RequestBody CirugiaRequestDTO cirugia);
+    @PutMapping("/cirugia/{id}")
+    CirugiaResponseDTO update(@PathVariable("id") String id, @RequestBody CirugiaRequestDTO cirugia);
 
     @DeleteMapping("/cirugia/{id}")
     CirugiaResponseDTO delete(@PathVariable("id") Long id);
+
+    @GetMapping("/cirugia/{id}/equipo-medico")
+    List<MiembroEquipoDTO.BackResponse> getEquipoMedico(@PathVariable("id") Long id);    
+    
+    @PostMapping("/cirugia/{id}/equipo-medico")
+    List<MiembroEquipoDTO.BackResponse> saveEquipoMedico(@PathVariable("id") Long id, @RequestBody List<MiembroEquipoDTO> miembros);
 }

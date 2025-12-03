@@ -1,10 +1,13 @@
 package com.dacs.bff.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dacs.bff.api.client.ApiBackendPersonalClient;
 import com.dacs.bff.dto.PaginatedResponse;
+import com.dacs.bff.dto.PersonalDto;
 import com.dacs.bff.dto.PersonalRequestDto;
 import com.dacs.bff.dto.PersonalResponseDto;
 
@@ -33,5 +36,10 @@ public class ApiBackendPersonalServiceImpl implements ApiBackendPersonalService 
     public void delete(Long id) throws Exception {
         apiBackendPersonalClient.delete(id);
 
+    }
+
+    @Override
+    public List<PersonalDto> searchByNombreOrDni(String param) {
+        return apiBackendPersonalClient.searchByNombreOrDni(param);
     }
 }

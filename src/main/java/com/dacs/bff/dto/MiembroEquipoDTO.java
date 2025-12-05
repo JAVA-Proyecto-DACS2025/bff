@@ -13,12 +13,14 @@ import lombok.Setter;
 @Data
 public class MiembroEquipoDTO {
 
-    // Datos del personal medico enviados a front
+    @Data
+    static public class Response {
     private Long personalId;
     private String legajo;
     private String nombre;
     private Long cirugiaId;
     private String rol;
+    }
 
 
     @Data
@@ -37,8 +39,8 @@ public class MiembroEquipoDTO {
     static public class BackResponse {
         private Long cirugiaId;
         private String rol;
-        private java.time.LocalDateTime fechaAsignacion;
+        private LocalDateTime fechaAsignacion;
 
-        private PersonalResponseDto personal;
+        private PersonalDto.BackResponse personal;
     }
 }

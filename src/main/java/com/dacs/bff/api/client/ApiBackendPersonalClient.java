@@ -3,6 +3,7 @@ package com.dacs.bff.api.client;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,28 +15,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.dacs.bff.config.FeignConfig;
 import com.dacs.bff.dto.PaginatedResponse;
 import com.dacs.bff.dto.PersonalDto;
-import com.dacs.bff.dto.PersonalRequestDto;
-import com.dacs.bff.dto.PersonalResponseDto;
 
 @FeignClient(name = "apiBackendPersonalClient", url = "${feign.client.config.apiBackendPersonalClient.url}", configuration = FeignConfig.class)
 
 public interface ApiBackendPersonalClient {
 
     @GetMapping("/personal")
-    PaginatedResponse<PersonalResponseDto> personales(@RequestParam(name = "page", required = false) Integer page,
+    PaginatedResponse<PersonalDto.BackResponse> personales(@RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size);
 
     @PostMapping("/personal")
-    PersonalResponseDto create(@RequestBody PersonalRequestDto personal);
+    PersonalDto.BackResponse create(@RequestBody PersonalDto.Create personal);
 
     @PutMapping("/personal/{id}")
-    PersonalResponseDto update(@PathVariable("id") Long id, @RequestBody PersonalRequestDto personal);
+    PersonalDto.BackResponse update(@PathVariable("id") Long id, @RequestBody PersonalDto.Update personal);
 
     @DeleteMapping("/personal/{id}")
-    void delete(@PathVariable("id") Long id);
+    ResponseEntity<Void> delete(@PathVariable("id") Long id);
 
     @GetMapping("/personal/resumen")
-    List<PersonalDto> searchByNombreOrDni(@RequestParam(name = "param", required = false) String param);
+    List<PersonalDto.BackResponse> searchByNombreOrDni(@RequestParam(name = "param", required = false) String param);
 
 
 }

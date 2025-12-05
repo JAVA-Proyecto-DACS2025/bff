@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.dacs.bff.api.client.ApiBackendCirugiasClient;
 import com.dacs.bff.dto.ApiResponse;
-import com.dacs.bff.dto.CirugiaRequestDTO;
-import com.dacs.bff.dto.CirugiaResponseDTO;
+import com.dacs.bff.dto.CirugiaDTO;
 import com.dacs.bff.dto.MiembroEquipoDTO;
 import com.dacs.bff.dto.PaginatedResponse;
 
@@ -22,24 +21,24 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService {
 	private ApiBackendCirugiasClient apiBackendClient;
 
 	@Override
-	public PaginatedResponse<CirugiaResponseDTO> getCirugias(Integer page, Integer size) {
+	public PaginatedResponse<CirugiaDTO.Response> getCirugias(Integer page, Integer size) {
 		return apiBackendClient.cirugias(page, size);
 	}
 
 	@Override
-	public CirugiaResponseDTO saveCirugia(CirugiaRequestDTO cirugia) throws Exception {
+	public CirugiaDTO.Response createCirugia(CirugiaDTO.Create cirugia) throws Exception {
 		// TODO validar parametro y lanzar exepcion
-		return apiBackendClient.save(cirugia);
+		return apiBackendClient.create(cirugia);
 	}
 
 	@Override
-	public CirugiaResponseDTO updateCirugia(String id, CirugiaRequestDTO cirugia) throws Exception {
+	public CirugiaDTO.Response updateCirugia(String id, CirugiaDTO.Update cirugia) throws Exception {
 		return apiBackendClient.update(id, cirugia);
 	}
 
 	@Override
-	public CirugiaResponseDTO deleteCirugia(Long id) throws Exception {
-		// TODO validar parametro y lanzar exepcion
+	public ResponseEntity<Void> deleteCirugia(Long id) throws Exception {
+
 		return apiBackendClient.delete(id);
 	}
 
@@ -50,13 +49,8 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService {
 	}
 
 	@Override
-	public List<MiembroEquipoDTO.BackResponse> saveEquipoMedico(List<MiembroEquipoDTO> miembros, Long id) {
-		System.err.println(
-				"Equipo medico guardado en BFF, cantidad: ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;" );
+	public List<MiembroEquipoDTO.BackResponse> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros, Long id) {
 
-		List<MiembroEquipoDTO.BackResponse> resp = apiBackendClient.saveEquipoMedico(id, miembros);
-		System.err.println(
-				"Equipo medico guardado en BFF, cantidad: ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;" + resp);
-		return resp;
+		return  apiBackendClient.saveEquipoMedico(id, miembros);
 	}
 }

@@ -2,22 +2,23 @@ package com.dacs.bff.service;
 
 import java.util.List;
 
-import com.dacs.bff.dto.CirugiaRequestDTO;
-import com.dacs.bff.dto.CirugiaResponseDTO;
+import org.springframework.http.ResponseEntity;
+
+import com.dacs.bff.dto.CirugiaDTO;
 import com.dacs.bff.dto.MiembroEquipoDTO;
 import com.dacs.bff.dto.PaginatedResponse;
 
 public interface ApiBackendCirugiaService {
 
-    public PaginatedResponse<CirugiaResponseDTO> getCirugias(Integer page, Integer size);
+    public PaginatedResponse<CirugiaDTO.Response> getCirugias(Integer page, Integer size);
 
-    public CirugiaResponseDTO saveCirugia(CirugiaRequestDTO cirugia) throws Exception;
+    public CirugiaDTO.Response createCirugia(CirugiaDTO.Create cirugia) throws Exception;
 
-    public CirugiaResponseDTO updateCirugia(String id, CirugiaRequestDTO cirugia) throws Exception;
+    public  CirugiaDTO.Response updateCirugia(String id, CirugiaDTO.Update cirugia) throws Exception;
 
-    public CirugiaResponseDTO deleteCirugia(Long id) throws Exception;
+    public  ResponseEntity<Void> deleteCirugia(Long id) throws Exception;
 
     public List<MiembroEquipoDTO.BackResponse> getEquipoMedico(Long id);
 
-    public List<MiembroEquipoDTO.BackResponse> saveEquipoMedico(List<MiembroEquipoDTO> miembros, Long id);
+    public List<MiembroEquipoDTO.BackResponse> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros, Long id);
 }

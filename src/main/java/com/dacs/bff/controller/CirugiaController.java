@@ -4,10 +4,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dacs.bff.dto.CirugiaResponseDTO;
 import com.dacs.bff.dto.MiembroEquipoDTO;
 import com.dacs.bff.dto.ApiResponse;
-import com.dacs.bff.dto.CirugiaRequestDTO;
+import com.dacs.bff.dto.CirugiaDTO;
 import com.dacs.bff.dto.PacienteDto;
 import com.dacs.bff.dto.PaginatedResponse;
 import com.dacs.bff.dto.Pagination;
@@ -41,13 +40,13 @@ public class CirugiaController {
     private ApiBackendPacienteService pacienteService;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse<List<CirugiaResponseDTO>>> getAll(
+    public ResponseEntity<ApiResponse<List<CirugiaDTO.Response>>> getAll(
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size) {
-        PaginatedResponse<CirugiaResponseDTO> backend = cirugiaService.getCirugias(page, size);
+        PaginatedResponse<CirugiaDTO.Response> backend = cirugiaService.getCirugias(page, size);
 
         // Construir ApiResponse con paginación
-        ApiResponse<List<CirugiaResponseDTO>> resp = new ApiResponse<>();
+        ApiResponse<List<CirugiaDTO.Response>> resp = new ApiResponse<>();
         resp.setSuccess(true);
         resp.setData(backend.getContent());
         resp.setMessage(null);
@@ -67,11 +66,11 @@ public class CirugiaController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<CirugiaResponseDTO>> save(@RequestBody CirugiaRequestDTO cirugiaDTO)
+    public ResponseEntity<ApiResponse<CirugiaDTO.Response>> create(@RequestBody CirugiaDTO.Create cirugiaDTO)
             throws Exception {
-        CirugiaResponseDTO data = cirugiaService.saveCirugia(cirugiaDTO);
+        CirugiaDTO.Response data = cirugiaService.createCirugia(cirugiaDTO);
 
-        ApiResponse<CirugiaResponseDTO> resp = new ApiResponse<>();
+        ApiResponse<CirugiaDTO.Response> resp = new ApiResponse<>();
         resp.setSuccess(true);
         resp.setData(data);
         resp.setMessage("Cirugia creada exitosamente");
@@ -82,11 +81,11 @@ public class CirugiaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<CirugiaResponseDTO>> update(@PathVariable String id,
-            @RequestBody CirugiaRequestDTO cirugiaDTO) throws Exception {
+    public ResponseEntity<ApiResponse<CirugiaDTO.Response>> update(@PathVariable String id,
+            @RequestBody CirugiaDTO.Update cirugiaDTO) throws Exception {
 
-        CirugiaResponseDTO data = cirugiaService.updateCirugia(id, cirugiaDTO);
-        ApiResponse<CirugiaResponseDTO> resp = new ApiResponse<>();
+        CirugiaDTO.Response data = cirugiaService.updateCirugia(id, cirugiaDTO);
+        ApiResponse<CirugiaDTO.Response> resp = new ApiResponse<>();
         resp.setSuccess(true);
         resp.setData(data);
         resp.setMessage("Cirugia actualizada exitosamente");
@@ -100,9 +99,10 @@ public class CirugiaController {
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         ApiResponse<Void> resp = new ApiResponse<>();
         try {
-            cirugiaService.deleteCirugia(id);
-            resp.setSuccess(true);
-            resp.setData(null);
+            ResponseEntity<Void> dataResponse = cirugiaService.deleteCirugia(id);       
+
+            resp.setSuccess(dataResponse.getStatusCode().is2xxSuccessful());       
+            resp.setData(null);                                       
             resp.setMessage("Cirugia eliminada exitosamente");
         } catch (Exception e) {
             resp.setSuccess(false);
@@ -116,12 +116,12 @@ public class CirugiaController {
     }
 
     @GetMapping("/{id}/equipo-medico")
-    public ResponseEntity<ApiResponse<List<MiembroEquipoDTO>>> getEquipoMedico(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<List<MiembroEquipoDTO.Response>>> getEquipoMedico(@PathVariable Long id) {
         List<MiembroEquipoDTO.BackResponse> backResponse = cirugiaService.getEquipoMedico(id);
-        ApiResponse<List<MiembroEquipoDTO>> resp = new ApiResponse<>();
+        ApiResponse<List<MiembroEquipoDTO.Response>> resp = new ApiResponse<>();
         resp.setSuccess(true);
         resp.setData(backResponse.stream().map(back -> {
-            MiembroEquipoDTO dto = new MiembroEquipoDTO();
+            MiembroEquipoDTO.Response dto = new MiembroEquipoDTO.Response();
             dto.setCirugiaId(back.getCirugiaId());
             dto.setPersonalId(back.getPersonal().getId());
             dto.setLegajo(back.getPersonal().getLegajo());
@@ -138,12 +138,12 @@ public class CirugiaController {
     }
 
     @PostMapping("/{id}/equipo-medico")
-    public ResponseEntity<ApiResponse<List<MiembroEquipoDTO>>> postEquipoMedico(@PathVariable Long id,
-            @RequestBody List<MiembroEquipoDTO> miembros) {
+    public ResponseEntity<ApiResponse<List<MiembroEquipoDTO.Response>>> postEquipoMedico(@PathVariable Long id,
+            @RequestBody List<MiembroEquipoDTO.Create> miembros) {
         List<MiembroEquipoDTO.BackResponse> backResponse = cirugiaService.saveEquipoMedico(miembros, id);
         
-        List<MiembroEquipoDTO> frontResponse = backResponse.stream().map(back -> {
-            MiembroEquipoDTO dto = new MiembroEquipoDTO();
+        List<MiembroEquipoDTO.Response> frontResponse = backResponse.stream().map(back -> {
+            MiembroEquipoDTO.Response dto = new MiembroEquipoDTO.Response();
             dto.setCirugiaId(back.getCirugiaId());
             dto.setPersonalId(back.getPersonal().getId());
             dto.setLegajo(back.getPersonal().getLegajo());
@@ -153,7 +153,7 @@ public class CirugiaController {
             return dto;
         }).toList();
 
-        ApiResponse<List<MiembroEquipoDTO>> resp = new ApiResponse<>();
+        ApiResponse<List<MiembroEquipoDTO.Response>> resp = new ApiResponse<>();
         resp.setSuccess(true);
         resp.setData(frontResponse);
         resp.setMessage("Equipo medico guardado exitosamente");

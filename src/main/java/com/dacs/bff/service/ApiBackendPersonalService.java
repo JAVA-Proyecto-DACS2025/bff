@@ -2,19 +2,19 @@ package com.dacs.bff.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import com.dacs.bff.dto.PaginatedResponse;
 import com.dacs.bff.dto.PersonalDto;
-import com.dacs.bff.dto.PersonalRequestDto;
-import com.dacs.bff.dto.PersonalResponseDto;
 
 public interface ApiBackendPersonalService {
-    PaginatedResponse<PersonalResponseDto> getPersonal(Integer page, Integer size);
+    PaginatedResponse<PersonalDto.BackResponse> getPersonal(Integer page, Integer size);
 
-    PersonalResponseDto create(PersonalRequestDto personalRequestDto);
+    PersonalDto.BackResponse create(PersonalDto.Create personalRequestDto);
 
-    PersonalResponseDto update(Long id,PersonalRequestDto personalRequestDto);
+    PersonalDto.BackResponse update(Long id,PersonalDto.Update personalRequestDto);
 
-    void delete(Long id) throws Exception;
+    ResponseEntity<Void> delete(Long id) throws Exception;
 
-    List<PersonalDto> searchByNombreOrDni(String param);
+    List<PersonalDto.Lite> searchByNombreOrDni(String param);
 }

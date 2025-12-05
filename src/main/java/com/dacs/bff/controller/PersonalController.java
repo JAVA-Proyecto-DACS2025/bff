@@ -12,8 +12,6 @@ import com.dacs.bff.dto.ApiResponse;
 import com.dacs.bff.dto.PaginatedResponse;
 import com.dacs.bff.dto.Pagination;
 import com.dacs.bff.dto.PersonalDto;
-import com.dacs.bff.dto.PersonalRequestDto;
-import com.dacs.bff.dto.PersonalResponseDto;
 import com.dacs.bff.service.ApiBackendPersonalService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,12 +33,12 @@ public class PersonalController {
     private ApiBackendPersonalService personalService;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse<List<PersonalResponseDto>>> getPersonal(
+    public ResponseEntity<ApiResponse<List<PersonalDto.BackResponse>>> getPersonal(
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size) {
-        PaginatedResponse<PersonalResponseDto> backend = personalService.getPersonal(page, size);
+        PaginatedResponse<PersonalDto.BackResponse> backend = personalService.getPersonal(page, size);
 
-        ApiResponse<List<PersonalResponseDto>> resp = new ApiResponse<>(); // MOVER a servicio o helper
+        ApiResponse<List<PersonalDto.BackResponse>> resp = new ApiResponse<>(); // MOVER a servicio o helper
         resp.setSuccess(true);
         resp.setData(backend.getContent());
         resp.setMessage(null);
@@ -60,11 +58,11 @@ public class PersonalController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<PersonalResponseDto>> createPersonal(
-            @RequestBody PersonalRequestDto personalRequestDto) throws Exception { /// ARREGLAR EL MAPEADO
-        PersonalResponseDto entity = personalService.create(personalRequestDto);
+    public ResponseEntity<ApiResponse<PersonalDto.BackResponse>> createPersonal(
+            @RequestBody PersonalDto.Create personalRequestDto) throws Exception { /// ARREGLAR EL MAPEADO
+        PersonalDto.BackResponse entity = personalService.create(personalRequestDto);
 
-        ApiResponse<PersonalResponseDto> resp = new ApiResponse<>();
+        ApiResponse<PersonalDto.BackResponse> resp = new ApiResponse<>();
         resp.setSuccess(true);
         resp.setData(entity);
         resp.setMessage(null);
@@ -75,11 +73,11 @@ public class PersonalController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<PersonalResponseDto>> updatePersonal(@PathVariable Long id,
-            @RequestBody PersonalRequestDto personalRequestDto) throws Exception {
-        PersonalResponseDto entity = personalService.update(id, personalRequestDto);
+    public ResponseEntity<ApiResponse<PersonalDto.BackResponse>> updatePersonal(@PathVariable Long id,
+            @RequestBody PersonalDto.Update personalRequestDto) throws Exception {
+        PersonalDto.BackResponse entity = personalService.update(id, personalRequestDto);
 
-        ApiResponse<PersonalResponseDto> resp = new ApiResponse<>();
+        ApiResponse<PersonalDto.BackResponse> resp = new ApiResponse<>();
         resp.setSuccess(true);
         resp.setData(entity);
         resp.setMessage(null);
@@ -92,9 +90,9 @@ public class PersonalController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deletePersonal(@PathVariable Long id) throws Exception {
-        personalService.delete(id);
+        ResponseEntity<Void> backResponse = personalService.delete(id);
         ApiResponse<Void> resp = new ApiResponse<Void>();
-        resp.setSuccess(true);
+        resp.setSuccess(backResponse.getStatusCode().is2xxSuccessful());
         resp.setData(null);
         resp.setMessage(null);
         resp.setTimestamp(java.time.OffsetDateTime.now().toString());
@@ -103,10 +101,10 @@ public class PersonalController {
     }
 
     @GetMapping("/resumen")
-    public ResponseEntity<ApiResponse<List<PersonalDto>>> searchByNombreOrDni(@RequestParam String param) {
-        List<PersonalDto> results = personalService.searchByNombreOrDni(param);
+    public ResponseEntity<ApiResponse<List<PersonalDto.Lite>>> searchByNombreOrDni(@RequestParam String param) {
+        List<PersonalDto.Lite> results = personalService.searchByNombreOrDni(param);
 
-        ApiResponse<List<PersonalDto>> resp = new ApiResponse<>();
+        ApiResponse<List<PersonalDto.Lite>> resp = new ApiResponse<>();
         resp.setSuccess(true);
         resp.setData(results);
         resp.setMessage(null);
@@ -115,5 +113,5 @@ public class PersonalController {
 
         return new ResponseEntity<>(resp, HttpStatus.OK);
     }
-    
+
 }

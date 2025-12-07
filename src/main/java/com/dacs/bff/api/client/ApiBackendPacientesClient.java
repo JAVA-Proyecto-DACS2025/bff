@@ -23,14 +23,15 @@ import com.dacs.bff.dto.PacienteDto;
 public interface ApiBackendPacientesClient {
 
     @GetMapping("/pacient")
-    List<PacienteDto> pacientes(@RequestParam(name = "search", required = false) List<Long> pacienteIds);
+    List<PacienteDto.FrontResponse> pacientes(@RequestParam(name = "search", required = false) List<Long> pacienteIds);
 
     @PostMapping("/pacient")
-    PacienteDto save(@RequestBody PacienteDto paciente);
+    PacienteDto.FrontResponse save(@RequestBody PacienteDto paciente);
     
     @PutMapping("/pacient")
-    PacienteDto update(@RequestBody PacienteDto paciente);
+    PacienteDto.FrontResponse update(@RequestBody PacienteDto paciente);
 
     @DeleteMapping("/pacient/{id}")
-    PacienteDto delete(@PathVariable("id") Long id);
+    PacienteDto.FrontResponse delete(@PathVariable("id") Long id);
+
 }

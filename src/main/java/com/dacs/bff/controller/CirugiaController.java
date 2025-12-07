@@ -13,6 +13,7 @@ import com.dacs.bff.dto.Pagination;
 // import com.dacs.bff.dto.CirugiaPageResponse;
 import com.dacs.bff.service.ApiBackendCirugiaService;
 import com.dacs.bff.service.ApiBackendPacienteService;
+import com.dacs.bff.util.ApiResponseBuilder;
 
 import feign.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -36,131 +37,70 @@ public class CirugiaController {
 
     @Autowired
     private ApiBackendCirugiaService cirugiaService;
+    
     @Autowired
     private ApiBackendPacienteService pacienteService;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse<List<CirugiaDTO.Response>>> getAll(
+    public ResponseEntity<ApiResponse<List<CirugiaDTO.FrontResponse>>> getAll(
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size) {
-        PaginatedResponse<CirugiaDTO.Response> backend = cirugiaService.getCirugias(page, size);
-
-        // Construir ApiResponse con paginación
-        ApiResponse<List<CirugiaDTO.Response>> resp = new ApiResponse<>();
-        resp.setSuccess(true);
-        resp.setData(backend.getContent());
-        resp.setMessage(null);
-        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
-        resp.setRequestId(java.util.UUID.randomUUID().toString());
-
-        Pagination p = new Pagination();
-        p.setPage(backend.getNumber());
-        p.setPageSize(backend.getSize());
-        p.setTotalItems(backend.getTotalElements());
-        p.setTotalPages(backend.getTotalPages());
-        p.setHasNext(backend.getNumber() < backend.getTotalPages() - 1);
-        p.setHasPrevious(backend.getNumber() > 0);
-        resp.setPagination(p);
-
-        return new ResponseEntity<>(resp, HttpStatus.OK);
+        PaginatedResponse<CirugiaDTO.FrontResponse> resp = cirugiaService.getCirugias(page, size);
+        return ApiResponseBuilder.ok(resp.getContent());
     }
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<CirugiaDTO.Response>> create(@RequestBody CirugiaDTO.Create cirugiaDTO)
+    public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> create(@RequestBody CirugiaDTO.Create cirugiaDTO)
             throws Exception {
-        CirugiaDTO.Response data = cirugiaService.createCirugia(cirugiaDTO);
-
-        ApiResponse<CirugiaDTO.Response> resp = new ApiResponse<>();
-        resp.setSuccess(true);
-        resp.setData(data);
-        resp.setMessage("Cirugia creada exitosamente");
-        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
-        resp.setRequestId(java.util.UUID.randomUUID().toString());
-
-        return new ResponseEntity<>(resp, HttpStatus.CREATED);
+        CirugiaDTO.FrontResponse data = cirugiaService.createCirugia(cirugiaDTO);
+        return ApiResponseBuilder.created(data, "Cirugia creada exitosamente");
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<CirugiaDTO.Response>> update(@PathVariable String id,
+    public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> update(@PathVariable String id,
             @RequestBody CirugiaDTO.Update cirugiaDTO) throws Exception {
 
-        CirugiaDTO.Response data = cirugiaService.updateCirugia(id, cirugiaDTO);
-        ApiResponse<CirugiaDTO.Response> resp = new ApiResponse<>();
-        resp.setSuccess(true);
-        resp.setData(data);
-        resp.setMessage("Cirugia actualizada exitosamente");
-        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
-        resp.setRequestId(java.util.UUID.randomUUID().toString());
-
-        return new ResponseEntity<>(resp, HttpStatus.OK);
+        CirugiaDTO.FrontResponse data = cirugiaService.updateCirugia(id, cirugiaDTO);
+        return ApiResponseBuilder.ok(data, "Cirugia actualizada exitosamente");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
-        ApiResponse<Void> resp = new ApiResponse<>();
         try {
-            ResponseEntity<Void> dataResponse = cirugiaService.deleteCirugia(id);       
-
-            resp.setSuccess(dataResponse.getStatusCode().is2xxSuccessful());       
-            resp.setData(null);                                       
-            resp.setMessage("Cirugia eliminada exitosamente");
+            cirugiaService.deleteCirugia(id);
+            return ApiResponseBuilder.ok(null, "Cirugia eliminada exitosamente");
         } catch (Exception e) {
-            resp.setSuccess(false);
-            resp.setData(null);
-            resp.setMessage("Error al eliminar la cirugia: " + e.getMessage());
+            return ApiResponseBuilder.serverError("Error al eliminar la cirugia: " + e.getMessage());
         }
-        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
-        resp.setRequestId(java.util.UUID.randomUUID().toString());
-
-        return new ResponseEntity<>(resp, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/equipo-medico")
     public ResponseEntity<ApiResponse<List<MiembroEquipoDTO.Response>>> getEquipoMedico(@PathVariable Long id) {
-        List<MiembroEquipoDTO.BackResponse> backResponse = cirugiaService.getEquipoMedico(id);
-        ApiResponse<List<MiembroEquipoDTO.Response>> resp = new ApiResponse<>();
-        resp.setSuccess(true);
-        resp.setData(backResponse.stream().map(back -> {
+        List<MiembroEquipoDTO.Response> data = cirugiaService.getEquipoMedico(id).stream().map(back -> {
             MiembroEquipoDTO.Response dto = new MiembroEquipoDTO.Response();
             dto.setCirugiaId(back.getCirugiaId());
             dto.setPersonalId(back.getPersonal().getId());
             dto.setLegajo(back.getPersonal().getLegajo());
             dto.setNombre(back.getPersonal().getNombre());
             dto.setRol(back.getRol());
-            //dto.setFechaAsignacion(back.getFechaAsignacion());   En caso de querer enviar la fecha de asignacion al front
             return dto;
-        }).toList());
-        resp.setMessage(null);
-        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
-        resp.setRequestId(java.util.UUID.randomUUID().toString());
-
-        return new ResponseEntity<>(resp, HttpStatus.OK);
+        }).toList();
+        return ApiResponseBuilder.ok(data);
     }
 
     @PostMapping("/{id}/equipo-medico")
     public ResponseEntity<ApiResponse<List<MiembroEquipoDTO.Response>>> postEquipoMedico(@PathVariable Long id,
             @RequestBody List<MiembroEquipoDTO.Create> miembros) {
-        List<MiembroEquipoDTO.BackResponse> backResponse = cirugiaService.saveEquipoMedico(miembros, id);
-        
-        List<MiembroEquipoDTO.Response> frontResponse = backResponse.stream().map(back -> {
+        List<MiembroEquipoDTO.Response> data = cirugiaService.saveEquipoMedico(miembros, id).stream().map(back -> {
             MiembroEquipoDTO.Response dto = new MiembroEquipoDTO.Response();
             dto.setCirugiaId(back.getCirugiaId());
             dto.setPersonalId(back.getPersonal().getId());
             dto.setLegajo(back.getPersonal().getLegajo());
             dto.setNombre(back.getPersonal().getNombre());
             dto.setRol(back.getRol());
-            //dto.setFechaAsignacion(back.getFechaAsignacion());   En caso de querer enviar la fecha de asignacion al front
             return dto;
         }).toList();
-
-        ApiResponse<List<MiembroEquipoDTO.Response>> resp = new ApiResponse<>();
-        resp.setSuccess(true);
-        resp.setData(frontResponse);
-        resp.setMessage("Equipo medico guardado exitosamente");
-        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
-        resp.setRequestId(java.util.UUID.randomUUID().toString());
-
-        return new ResponseEntity<>(resp, HttpStatus.OK);
+        return ApiResponseBuilder.ok(data, "Equipo medico guardado exitosamente");
     }
 
 }

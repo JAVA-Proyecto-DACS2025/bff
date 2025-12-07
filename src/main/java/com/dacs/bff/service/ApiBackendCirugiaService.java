@@ -10,11 +10,11 @@ import com.dacs.bff.dto.PaginatedResponse;
 
 public interface ApiBackendCirugiaService {
 
-    public PaginatedResponse<CirugiaDTO.Response> getCirugias(Integer page, Integer size);
+    public PaginatedResponse<CirugiaDTO.FrontResponse> getCirugias(Integer page, Integer size);
 
-    public CirugiaDTO.Response createCirugia(CirugiaDTO.Create cirugia) throws Exception;
+    public CirugiaDTO.FrontResponse createCirugia(CirugiaDTO.Create cirugia) throws Exception;
 
-    public  CirugiaDTO.Response updateCirugia(String id, CirugiaDTO.Update cirugia) throws Exception;
+    public  CirugiaDTO.FrontResponse updateCirugia(String id, CirugiaDTO.Update cirugia) throws Exception;
 
     public  ResponseEntity<Void> deleteCirugia(Long id) throws Exception;
 

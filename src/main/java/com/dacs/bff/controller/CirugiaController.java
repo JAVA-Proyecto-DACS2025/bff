@@ -46,7 +46,7 @@ public class CirugiaController {
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size) {
         PaginatedResponse<CirugiaDTO.FrontResponse> resp = cirugiaService.getCirugias(page, size);
-        return ApiResponseBuilder.ok(resp.getContent());
+        return ApiResponseBuilder.okWithPagination(resp);
     }
 
     @PostMapping("")

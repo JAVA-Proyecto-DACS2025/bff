@@ -1,11 +1,15 @@
 package com.dacs.bff.util;
 
 import org.springframework.stereotype.Component;
-
+import org.slf4j.Logger;  
+import org.slf4j.LoggerFactory; 
 import com.dacs.bff.dto.CirugiaDTO;
 
 @Component
+ 
+
 public class CirugiaMapper {
+    private static final Logger log = LoggerFactory.getLogger(CirugiaMapper.class);
 
     public CirugiaDTO.FrontResponse toFrontResponse(CirugiaDTO.BackResponse backResp) {
         if (backResp == null) {
@@ -18,7 +22,6 @@ public class CirugiaMapper {
         front.setId(backResp.getId());
         front.setServicio(backResp.getServicio());
         front.setPrioridad(backResp.getPrioridad());
-        front.setFecha_hora_inicio(backResp.getFecha_hora_inicio());
         front.setEstado(backResp.getEstado());
         front.setAnestesia(backResp.getAnestesia());
         front.setTipo(backResp.getTipo());
@@ -38,9 +41,41 @@ public class CirugiaMapper {
             }
         }
 
+        // Extraer fecha y hora
+        if (backResp.getFecha_hora_inicio() != null) {
+            String fechaHoraCompleta = backResp.getFecha_hora_inicio();
+            try {
+                // parsear formato ISO 8601 (ej: 2025-12-07T14:30:45.123Z)
+                java.time.OffsetDateTime odt = java.time.OffsetDateTime.parse(fechaHoraCompleta);
+                String fecha = odt.toLocalDate().toString(); // yyyy-MM-dd
+                String hora = odt.toLocalTime().toString().substring(0, 8); // HH:mm:ss
+                
+                front.setFechaInicio(fecha);
+                front.setHoraInicio(hora);
+            } catch (Exception e) {
+                // si falla el parseo, intentar extraer manualmente
+                try {
+                    // formato: 2025-11-27T03:00:00 -> extrae fecha (antes de 'T') y hora (después de 'T')
+                    String[] partes = fechaHoraCompleta.split("T");
+                    if (partes.length >= 1) {
+                        front.setFechaInicio(partes[0]); // 2025-11-27
+                    }
+                    if (partes.length >= 2) {
+                        String horaConMs = partes[1]; // 03:00:00 o 03:00:00.123Z
+                        String soloHora = horaConMs.split("\\.")[0]; // quita milisegundos
+                        soloHora = soloHora.replace("Z", ""); // quita Z si existe
+                        front.setHoraInicio(soloHora); // 03:00:00
+                    }
+                 } catch (Exception ex) {
+                     log.error("Error parseando fecha_hora_inicio: {}", fechaHoraCompleta, ex);
+                 }
+            }
+        }
+
         // extraer nombre del quirófano (asume que QuirofanoDto tiene getNombre())
         if (backResp.getQuirofano() != null && backResp.getQuirofano().getNombre() != null) {
             front.setQuirofano(backResp.getQuirofano().getNombre());
+            front.setQuirofanoId(Long.valueOf(backResp.getQuirofano().getId()));
         }
 
         return front;

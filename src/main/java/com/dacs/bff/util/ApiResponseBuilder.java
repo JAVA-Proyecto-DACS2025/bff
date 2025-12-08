@@ -1,9 +1,11 @@
 package com.dacs.bff.util;
 
 import com.dacs.bff.dto.ApiResponse;
+import com.dacs.bff.dto.PaginatedResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class ApiResponseBuilder {
@@ -40,5 +42,24 @@ public class ApiResponseBuilder {
 
     public static <T> ResponseEntity<ApiResponse<T>> serverError(String message) {
         return buildResponse(null, HttpStatus.INTERNAL_SERVER_ERROR, message);
+    }
+
+    public static <T> ResponseEntity<ApiResponse<List<T>>> okWithPagination(PaginatedResponse<T> pageResp) {
+        ApiResponse<List<T>> resp = new ApiResponse<>();
+        resp.setSuccess(true);
+        resp.setData(pageResp.getContent());
+        resp.setMessage(null);
+        resp.setTimestamp(OffsetDateTime.now().toString());
+        resp.setRequestId(UUID.randomUUID().toString());
+
+        // llenar metadatos de paginación
+        var pagination = new com.dacs.bff.dto.Pagination();
+        pagination.setPage(pageResp.getNumber());
+        pagination.setPageSize(pageResp.getSize());
+        pagination.setTotalItems(pageResp.getTotalElements());
+        pagination.setTotalPages(pageResp.getTotalPages());
+        resp.setPagination(pagination);
+
+        return new ResponseEntity<>(resp, HttpStatus.OK);
     }
 }

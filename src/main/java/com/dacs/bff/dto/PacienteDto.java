@@ -14,7 +14,6 @@ public class PacienteDto {
         private String nombre;
         private String apellido;
         private String dni;
-        private Integer edad;
         private String fecha_nacimiento;
         private String direccion;
         private String telefono;
@@ -37,8 +36,9 @@ public class PacienteDto {
     }
 
     @Data
-    public static class FrontResponseLite {
+    public static class FrontResponseLite{
         private String nombre;
+        private String apellido;
         private String dni;
         private Long id;
     }

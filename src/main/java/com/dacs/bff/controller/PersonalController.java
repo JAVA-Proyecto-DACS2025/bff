@@ -35,8 +35,9 @@ public class PersonalController {
     @GetMapping("")
     public ResponseEntity<ApiResponse<List<PersonalDto.BackResponse>>> getPersonal(
             @RequestParam(name = "page", required = false) Integer page,
-            @RequestParam(name = "size", required = false) Integer size) {
-        PaginatedResponse<PersonalDto.BackResponse> backend = personalService.getPersonal(page, size);
+            @RequestParam(name = "size", required = false) Integer size,
+            @RequestParam(name = "param", required = false) String param) throws Exception {
+        PaginatedResponse<PersonalDto.BackResponse> backend = personalService.getPersonal(page, size, param);
 
         ApiResponse<List<PersonalDto.BackResponse>> resp = new ApiResponse<>(); // MOVER a servicio o helper
         resp.setSuccess(true);
@@ -101,15 +102,27 @@ public class PersonalController {
     }
 
     @GetMapping("/resumen")
-    public ResponseEntity<ApiResponse<List<PersonalDto.Lite>>> searchByNombreOrDni(@RequestParam String param) {
-        List<PersonalDto.Lite> results = personalService.searchByNombreOrDni(param);
+    public ResponseEntity<ApiResponse<List<PersonalDto.FrontResponseLite>>> getPersonalLite(
+            @RequestParam(name = "page") Integer page,
+            @RequestParam(name = "size") Integer size,
+            @RequestParam(name = "param", required = false) String param) {
+        PaginatedResponse<PersonalDto.FrontResponseLite> results = personalService.getPersonalLite(page, size,
+                param);
 
-        ApiResponse<List<PersonalDto.Lite>> resp = new ApiResponse<>();
+        ApiResponse<List<PersonalDto.FrontResponseLite>> resp = new ApiResponse<>();
         resp.setSuccess(true);
-        resp.setData(results);
+        resp.setData(results.getContent());
         resp.setMessage(null);
         resp.setTimestamp(java.time.OffsetDateTime.now().toString());
         resp.setRequestId(java.util.UUID.randomUUID().toString());
+        Pagination p = new Pagination();
+        p.setPage(results.getNumber());
+        p.setPageSize(results.getSize());
+        p.setTotalItems(results.getTotalElements());
+        p.setTotalPages(results.getTotalPages());
+        p.setHasNext(results.getNumber() < results.getTotalPages() - 1);
+        p.setHasPrevious(results.getNumber() > 0);
+        resp.setPagination(p);
 
         return new ResponseEntity<>(resp, HttpStatus.OK);
     }

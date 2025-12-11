@@ -3,19 +3,24 @@ package com.dacs.bff.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dacs.bff.dto.ApiResponse;
 import com.dacs.bff.dto.PacienteDto;
+import com.dacs.bff.dto.PaginatedResponse;
 import com.dacs.bff.service.ApiBackendPacienteService;
+import com.dacs.bff.util.ApiResponseBuilder;
 
+import ch.qos.logback.core.model.Model;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,39 +33,46 @@ public class PacienteController {
     @Autowired
     private ApiBackendPacienteService pacienteService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
+    // Paginación + filtro opcional
     @GetMapping("")
-    public ResponseEntity<List<PacienteDto.FrontResponse>> getByIds(@RequestParam(name = "search", required = false) String search) {
-        log.info("Obteniendo lista de pacientes (search={})", search);
+    public ResponseEntity<ApiResponse<List<PacienteDto.FrontResponse>>> getPacientes(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "16") int size,
+            @RequestParam(name = "search", required = false) String search) {
 
-        // obtener todos desde el servicio (el servicio actual acepta List<Long> ids;
-        // pasamos null para obtener todos)
-        List<PacienteDto.FrontResponse> data = pacienteService.getPacientesByIds((List<Long>) null);
+        PaginatedResponse<PacienteDto.FrontResponse> data = pacienteService.getPacientesByPage(page, size, search);
 
-        if (search == null || search.isBlank()) {
-            return new ResponseEntity<>(data, HttpStatus.OK);
-        }
+        return ApiResponseBuilder.okWithPagination(data);
+    }
 
-        String s = search.toLowerCase();
-        List<PacienteDto.FrontResponse> filtered = data.stream()
-                .filter(p -> (p.getNombre() != null && p.getNombre().toLowerCase().contains(s))
-                        || (p.getDni() != null && p.getDni().toLowerCase().contains(s)))
-                .collect(Collectors.toList());
+    @GetMapping("/lite")
+    public ResponseEntity<ApiResponse<List<PacienteDto.FrontResponseLite>>> getPacientesLite(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "16") int size,
+            @RequestParam(name = "search", required = false) String search) {
 
-        return new ResponseEntity<>(filtered, HttpStatus.OK);
+        PaginatedResponse<PacienteDto.FrontResponseLite> data = pacienteService.getPacientesLite(page, size, search);;
+        return ApiResponseBuilder.okWithPagination(data);
     }
 
     @PostMapping("")
-    public ResponseEntity<PacienteDto.FrontResponse> save(@RequestBody PacienteDto pacienteDto) throws Exception {
-        log.info("Creando nuevo paciente");
+    public ResponseEntity<PacienteDto.FrontResponse> save(@RequestBody PacienteDto.FrontResponse pacienteDto)
+            throws Exception {
         PacienteDto.FrontResponse data = pacienteService.savePaciente(pacienteDto);
         return new ResponseEntity<>(data, HttpStatus.CREATED);
     }
 
-    // obtiene personas cargadas en el hospital mediante la api externa
     @GetMapping("/hospital")
-    public List<PacienteDto.FrontResponse> getPersonasHospital(@RequestParam("cantidad") int cantidad) {
-        
+    public List<PacienteDto.FrontResponse> getPacientesHospital(@RequestParam("cantidad") int cantidad) {
         return pacienteService.getPacientesHospital(cantidad);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable("id") Long id) throws Exception {
+        ResponseEntity<Void> backResponse = pacienteService.deletePaciente(id);
+        return new ResponseEntity<>(backResponse.getStatusCode());
+    }
 }

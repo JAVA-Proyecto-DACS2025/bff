@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import com.dacs.bff.dto.PaginatedResponse;
 import com.dacs.bff.dto.PersonalDto;
 
-public interface ApiBackendPersonalService {
-    PaginatedResponse<PersonalDto.BackResponse> getPersonal(Integer page, Integer size);
+public interface ApiBackendPersonalService {     //Cambiar todos a frontresponse
+    PaginatedResponse<PersonalDto.BackResponse> getPersonal(Integer page, Integer size, String param) throws Exception;
 
     PersonalDto.BackResponse create(PersonalDto.Create personalRequestDto);
 
@@ -16,5 +16,5 @@ public interface ApiBackendPersonalService {
 
     ResponseEntity<Void> delete(Long id) throws Exception;
 
-    List<PersonalDto.Lite> searchByNombreOrDni(String param);
+    PaginatedResponse<PersonalDto.FrontResponseLite> getPersonalLite(Integer page, Integer size, String param);
 }

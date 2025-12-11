@@ -12,7 +12,6 @@ import com.dacs.bff.dto.PaginatedResponse;
 import com.dacs.bff.dto.Pagination;
 // import com.dacs.bff.dto.CirugiaPageResponse;
 import com.dacs.bff.service.ApiBackendCirugiaService;
-import com.dacs.bff.service.ApiBackendPacienteService;
 import com.dacs.bff.util.ApiResponseBuilder;
 
 import feign.Response;
@@ -38,8 +37,6 @@ public class CirugiaController {
     @Autowired
     private ApiBackendCirugiaService cirugiaService;
     
-    @Autowired
-    private ApiBackendPacienteService pacienteService;
 
     @GetMapping("")
     public ResponseEntity<ApiResponse<List<CirugiaDTO.FrontResponse>>> getAll(

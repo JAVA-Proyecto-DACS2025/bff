@@ -17,8 +17,8 @@ public class ApiBackendPersonalServiceImpl implements ApiBackendPersonalService 
     private ApiBackendPersonalClient apiBackendPersonalClient;
 
     @Override
-    public PaginatedResponse<PersonalDto.BackResponse> getPersonal(Integer page, Integer size) {
-        return apiBackendPersonalClient.personales(page, size);
+    public PaginatedResponse<PersonalDto.BackResponse> getPersonal(Integer page, Integer size, String param) throws Exception {
+        return apiBackendPersonalClient.getPersonal(page, size, param);
     }
 
     @Override
@@ -38,18 +38,24 @@ public class ApiBackendPersonalServiceImpl implements ApiBackendPersonalService 
     }
 
     @Override
-    public List<PersonalDto.Lite> searchByNombreOrDni(String param) {
-        List<PersonalDto.BackResponse> backResponse = apiBackendPersonalClient.searchByNombreOrDni(param);
-        return backResponse.stream()
-                .map(pr -> {
-                    PersonalDto.Lite lite = new PersonalDto.Lite();
-                    lite.setId(pr.getId());
-                    lite.setNombre(pr.getNombre());
-                    lite.setDni(pr.getDni());
-                    lite.setRol(pr.getRol());
-                    lite.setLegajo(pr.getLegajo());
-                    return lite;
+    public PaginatedResponse<PersonalDto.FrontResponseLite> getPersonalLite(Integer page, Integer size, String param) {
+        PaginatedResponse<PersonalDto.BackResponse> backResp = apiBackendPersonalClient.getPersonal(page, size, param);
+        PaginatedResponse<PersonalDto.FrontResponseLite> frontResp = new PaginatedResponse<>();
+        frontResp.setContent(backResp.getContent().stream()
+                .map(back -> {
+                    PersonalDto.FrontResponseLite front = new PersonalDto.FrontResponseLite();
+                    front.setId(back.getId());
+                    front.setDni(back.getDni());
+                    front.setLegajo(back.getLegajo());
+                    front.setNombre(back.getNombre());
+                    front.setRol(back.getRol());
+                    return front;
                 })
-                .toList();
-    }
+                .toList());
+        frontResp.setNumber(backResp.getNumber());
+        frontResp.setSize(backResp.getSize());
+        frontResp.setTotalElements(backResp.getTotalElements());
+        frontResp.setTotalPages(backResp.getTotalPages());
+        return frontResp;
+    } 
 }

@@ -18,7 +18,7 @@ public class PersonalDto {
     }
 
     @Data
-    static public class Lite {
+    static public class FrontResponseLite {
         private Long id;
         private String dni;
         private String legajo;

@@ -20,9 +20,9 @@ import com.dacs.bff.dto.PersonalDto;
 
 public interface ApiBackendPersonalClient {
 
-    @GetMapping("/personal")
-    PaginatedResponse<PersonalDto.BackResponse> personales(@RequestParam(name = "page", required = false) Integer page,
-            @RequestParam(name = "size", required = false) Integer size);
+    // @GetMapping("/personal")
+    // PaginatedResponse<PersonalDto.BackResponse> getPersonal(@RequestParam(name = "page", required = false) Integer page,
+    //         @RequestParam(name = "size", required = false) Integer size);
 
     @PostMapping("/personal")
     PersonalDto.BackResponse create(@RequestBody PersonalDto.Create personal);
@@ -33,8 +33,10 @@ public interface ApiBackendPersonalClient {
     @DeleteMapping("/personal/{id}")
     ResponseEntity<Void> delete(@PathVariable("id") Long id);
 
-    @GetMapping("/personal/resumen")
-    List<PersonalDto.BackResponse> searchByNombreOrDni(@RequestParam(name = "param", required = false) String param);
-
+    @GetMapping("/personal")
+    PaginatedResponse<PersonalDto.BackResponse> getPersonal(
+            @RequestParam(name = "page", required = false) Integer page,
+            @RequestParam(name = "size", required = false) Integer size,
+            @RequestParam(name = "param", required = false) String param);
 
 }

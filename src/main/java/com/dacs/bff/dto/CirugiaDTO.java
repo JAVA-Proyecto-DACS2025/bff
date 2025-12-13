@@ -1,5 +1,7 @@
 package com.dacs.bff.dto;
 
+import java.sql.Date;
+
 import lombok.Data;
 
 @Data

@@ -30,16 +30,17 @@ public interface ApiBackendCirugiasClient {
 
     @PostMapping("/cirugia")
     CirugiaDTO.BackResponse create(@RequestBody CirugiaDTO.Create cirugia);
+
     @PutMapping("/cirugia/{id}")
-    
-    CirugiaDTO.BackResponse update(@PathVariable("id") String id, @RequestBody CirugiaDTO.Update cirugia);
+    ResponseEntity<CirugiaDTO.BackResponse> update(@PathVariable("id") String id, @RequestBody CirugiaDTO.Update cirugia);
 
     @DeleteMapping("/cirugia/{id}")
     ResponseEntity<Void> delete(@PathVariable("id") Long id);
 
     @GetMapping("/cirugia/{id}/equipo-medico")
-    List<MiembroEquipoDTO.BackResponse> getEquipoMedico(@PathVariable("id") Long id);    
-    
+    List<MiembroEquipoDTO.BackResponse> getEquipoMedico(@PathVariable("id") Long id);
+
     @PostMapping("/cirugia/{id}/equipo-medico")
-    List<MiembroEquipoDTO.BackResponse> saveEquipoMedico(@PathVariable("id") Long id, @RequestBody List<MiembroEquipoDTO.Create> miembros);
+    List<MiembroEquipoDTO.BackResponse> saveEquipoMedico(@PathVariable("id") Long id,
+            @RequestBody List<MiembroEquipoDTO.Create> miembros);
 }

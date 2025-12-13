@@ -57,8 +57,8 @@ public class CirugiaController {
     public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> update(@PathVariable String id,
             @RequestBody CirugiaDTO.Update cirugiaDTO) throws Exception {
 
-        CirugiaDTO.FrontResponse data = cirugiaService.updateCirugia(id, cirugiaDTO);
-        return ApiResponseBuilder.ok(data, "Cirugia actualizada exitosamente");
+        ResponseEntity<CirugiaDTO.FrontResponse> data = cirugiaService.updateCirugia(id, cirugiaDTO);
+        return ApiResponseBuilder.ok(data.getBody(), "Cirugia actualizada exitosamente");
     }
 
     @DeleteMapping("/{id}")

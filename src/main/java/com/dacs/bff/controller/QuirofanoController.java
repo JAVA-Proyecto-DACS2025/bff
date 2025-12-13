@@ -24,7 +24,7 @@ public class QuirofanoController {
     @Autowired
     private ApiBackendQuirofanoService quirofanoService;
     @GetMapping("")
-    public ResponseEntity<List<QuirofanoDto>> getAll() {
+    public ResponseEntity<List<QuirofanoDto>> getAll() throws Exception {
         log.info("Obteniendo lista de quirofanos");
         List<QuirofanoDto> data = quirofanoService.getQuirofanos();
         return new ResponseEntity<>(data, HttpStatus.OK);

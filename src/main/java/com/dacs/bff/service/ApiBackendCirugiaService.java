@@ -14,7 +14,7 @@ public interface ApiBackendCirugiaService {
 
     public CirugiaDTO.FrontResponse createCirugia(CirugiaDTO.Create cirugia) throws Exception;
 
-    public  CirugiaDTO.FrontResponse updateCirugia(String id, CirugiaDTO.Update cirugia) throws Exception;
+    public  ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.Update cirugia) throws Exception;
 
     public  ResponseEntity<Void> deleteCirugia(Long id) throws Exception;
 

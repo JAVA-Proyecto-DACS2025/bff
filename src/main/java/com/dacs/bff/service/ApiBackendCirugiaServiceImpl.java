@@ -1,6 +1,7 @@
 package com.dacs.bff.service;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -13,6 +14,7 @@ import com.dacs.bff.api.client.ApiBackendCirugiasClient;
 import com.dacs.bff.dto.CirugiaDTO;
 import com.dacs.bff.dto.MiembroEquipoDTO;
 import com.dacs.bff.dto.PaginatedResponse;
+import com.dacs.bff.dto.ServicioDto;
 import com.dacs.bff.util.CirugiaMapper;
 
 
@@ -20,14 +22,14 @@ import com.dacs.bff.util.CirugiaMapper;
 public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService {
 
 	@Autowired
-	private ApiBackendCirugiasClient apiBackendClient;
+	private ApiBackendCirugiasClient apiBackendCirugiaClient;
 
 	@Autowired
 	private CirugiaMapper cirugiaMapper;
 
 	@Override
 	public PaginatedResponse<CirugiaDTO.FrontResponse> getCirugias(Integer page, Integer size) {
-		PaginatedResponse<CirugiaDTO.BackResponse> backResp = apiBackendClient.cirugias(page, size);
+		PaginatedResponse<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.cirugias(page, size);
 
 		// mapear cada elemento de la lista
 		List<CirugiaDTO.FrontResponse> frontList = backResp.getContent().stream()
@@ -48,31 +50,42 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService {
 	@Override
 	public CirugiaDTO.FrontResponse createCirugia(CirugiaDTO.Create cirugia) throws Exception {
 
-		CirugiaDTO.BackResponse backResp = apiBackendClient.create(cirugia);
+		CirugiaDTO.BackResponse backResp = apiBackendCirugiaClient.create(cirugia);
 		return cirugiaMapper.toFrontResponse(backResp);
 	}
 
 	@Override
 	public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.Update cirugia) throws Exception {
-		ResponseEntity<CirugiaDTO.BackResponse> backResp = apiBackendClient.update(id, cirugia);
+		ResponseEntity<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.update(id, cirugia);
 		return ResponseEntity.status(backResp.getStatusCode()).body(cirugiaMapper.toFrontResponse(backResp.getBody()));
 	}
 
 	@Override
 	public ResponseEntity<Void> deleteCirugia(Long id) throws Exception {
 
-		return apiBackendClient.delete(id);
+		return apiBackendCirugiaClient.delete(id);
 	}
 
 	@Override
-	public List<MiembroEquipoDTO.BackResponse> getEquipoMedico(Long id) {
+	public ResponseEntity<List<MiembroEquipoDTO.BackResponse>> getEquipoMedico(Long id) {
 
-		return apiBackendClient.getEquipoMedico(id);
+		return apiBackendCirugiaClient.getEquipoMedico(id);
 	}
 
 	@Override
-	public List<MiembroEquipoDTO.BackResponse> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros, Long id) {
+	public ResponseEntity<List<MiembroEquipoDTO.BackResponse>> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros, Long id) {
 
-		return apiBackendClient.saveEquipoMedico(id, miembros);
+		return apiBackendCirugiaClient.saveEquipoMedico(id, miembros);
+	}
+
+	@Override
+	public ResponseEntity<List<LocalDateTime>> getTurnosDisponibles(int cantidadProximosDias, Long servicioId) {
+		return apiBackendCirugiaClient.getTurnosDisponibles(cantidadProximosDias, servicioId);
+	}
+
+	@Override
+	public ResponseEntity<List<ServicioDto>> getServicios() {
+		
+		return apiBackendCirugiaClient.getServicios();
 	}
 }

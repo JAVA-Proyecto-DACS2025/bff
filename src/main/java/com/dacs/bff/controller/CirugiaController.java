@@ -10,6 +10,7 @@ import com.dacs.bff.dto.CirugiaDTO;
 import com.dacs.bff.dto.PacienteDto;
 import com.dacs.bff.dto.PaginatedResponse;
 import com.dacs.bff.dto.Pagination;
+import com.dacs.bff.dto.ServicioDto;
 // import com.dacs.bff.dto.CirugiaPageResponse;
 import com.dacs.bff.service.ApiBackendCirugiaService;
 import com.dacs.bff.util.ApiResponseBuilder;
@@ -17,6 +18,8 @@ import com.dacs.bff.util.ApiResponseBuilder;
 import feign.Response;
 import lombok.extern.slf4j.Slf4j;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,6 @@ public class CirugiaController {
 
     @Autowired
     private ApiBackendCirugiaService cirugiaService;
-    
 
     @GetMapping("")
     public ResponseEntity<ApiResponse<List<CirugiaDTO.FrontResponse>>> getAll(
@@ -73,7 +75,7 @@ public class CirugiaController {
 
     @GetMapping("/{id}/equipo-medico")
     public ResponseEntity<ApiResponse<List<MiembroEquipoDTO.Response>>> getEquipoMedico(@PathVariable Long id) {
-        List<MiembroEquipoDTO.Response> data = cirugiaService.getEquipoMedico(id).stream().map(back -> {
+        List<MiembroEquipoDTO.Response> data = cirugiaService.getEquipoMedico(id).getBody().stream().map(back -> {
             MiembroEquipoDTO.Response dto = new MiembroEquipoDTO.Response();
             dto.setCirugiaId(back.getCirugiaId());
             dto.setPersonalId(back.getPersonal().getId());
@@ -88,7 +90,7 @@ public class CirugiaController {
     @PostMapping("/{id}/equipo-medico")
     public ResponseEntity<ApiResponse<List<MiembroEquipoDTO.Response>>> postEquipoMedico(@PathVariable Long id,
             @RequestBody List<MiembroEquipoDTO.Create> miembros) {
-        List<MiembroEquipoDTO.Response> data = cirugiaService.saveEquipoMedico(miembros, id).stream().map(back -> {
+        List<MiembroEquipoDTO.Response> data = cirugiaService.saveEquipoMedico(miembros, id).getBody().stream().map(back -> {
             MiembroEquipoDTO.Response dto = new MiembroEquipoDTO.Response();
             dto.setCirugiaId(back.getCirugiaId());
             dto.setPersonalId(back.getPersonal().getId());
@@ -100,4 +102,17 @@ public class CirugiaController {
         return ApiResponseBuilder.ok(data, "Equipo medico guardado exitosamente");
     }
 
+    @GetMapping("/horarios-disponibles")
+    public ResponseEntity<ApiResponse<List<LocalDateTime>>> getHorariosDisponibles(
+            @RequestParam int cantidadProximosDias, @RequestParam Long servicioId) {
+        ResponseEntity<List<LocalDateTime>> horarios = cirugiaService.getTurnosDisponibles(cantidadProximosDias,
+                servicioId);
+        return ApiResponseBuilder.ok(horarios.getBody());
+    }
+
+    @GetMapping("/servicios")
+    public ResponseEntity<ApiResponse<List<ServicioDto>>> getServicios() {
+        ResponseEntity<List<ServicioDto>> servicios = cirugiaService.getServicios();
+        return ApiResponseBuilder.ok(servicios.getBody());
+    }
 }

@@ -1,12 +1,11 @@
 package com.dacs.bff.util;
 
 import org.springframework.stereotype.Component;
-import org.slf4j.Logger;  
-import org.slf4j.LoggerFactory; 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.dacs.bff.dto.CirugiaDTO;
 
 @Component
- 
 
 public class CirugiaMapper {
     private static final Logger log = LoggerFactory.getLogger(CirugiaMapper.class);
@@ -17,16 +16,24 @@ public class CirugiaMapper {
         }
 
         CirugiaDTO.FrontResponse front = new CirugiaDTO.FrontResponse();
-        
+
         // copiar campos simples
         front.setId(backResp.getId());
-        front.setServicio(backResp.getServicio());
         front.setPrioridad(backResp.getPrioridad());
         front.setEstado(backResp.getEstado());
         front.setAnestesia(backResp.getAnestesia());
         front.setTipo(backResp.getTipo());
 
-        // extraer nombre del paciente (concatenar nombre + apellido o usar campo nombre)
+        // extraer nombre del servicio
+        if (backResp.getServicio() != null) {
+            front.setServicioId(backResp.getServicio().getId());
+            if (backResp.getServicio().getNombre() != null) {
+                front.setServicio(backResp.getServicio().getNombre());
+            }
+        }
+
+        // extraer nombre del paciente (concatenar nombre + apellido o usar campo
+        // nombre)
         if (backResp.getPaciente() != null) {
             front.setDni(backResp.getPaciente().getDni());
             front.setPacienteId(backResp.getPaciente().getId());
@@ -49,13 +56,14 @@ public class CirugiaMapper {
                 java.time.OffsetDateTime odt = java.time.OffsetDateTime.parse(fechaHoraCompleta);
                 String fecha = odt.toLocalDate().toString(); // yyyy-MM-dd
                 String hora = odt.toLocalTime().toString().substring(0, 8); // HH:mm:ss
-                
+
                 front.setFechaInicio(fecha);
                 front.setHoraInicio(hora);
             } catch (Exception e) {
                 // si falla el parseo, intentar extraer manualmente
                 try {
-                    // formato: 2025-11-27T03:00:00 -> extrae fecha (antes de 'T') y hora (después de 'T')
+                    // formato: 2025-11-27T03:00:00 -> extrae fecha (antes de 'T') y hora (después
+                    // de 'T')
                     String[] partes = fechaHoraCompleta.split("T");
                     if (partes.length >= 1) {
                         front.setFechaInicio(partes[0]); // 2025-11-27
@@ -66,9 +74,9 @@ public class CirugiaMapper {
                         soloHora = soloHora.replace("Z", ""); // quita Z si existe
                         front.setHoraInicio(soloHora); // 03:00:00
                     }
-                 } catch (Exception ex) {
-                     log.error("Error parseando fecha_hora_inicio: {}", fechaHoraCompleta, ex);
-                 }
+                } catch (Exception ex) {
+                    log.error("Error parseando fecha_hora_inicio: {}", fechaHoraCompleta, ex);
+                }
             }
         }
 
@@ -80,6 +88,5 @@ public class CirugiaMapper {
 
         return front;
     }
-
 
 }

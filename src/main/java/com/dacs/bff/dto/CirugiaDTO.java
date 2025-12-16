@@ -10,7 +10,7 @@ public class CirugiaDTO {
     @Data
     public static class BackResponse {
         private Long id;
-        private String servicio;
+        
         private String prioridad;
         private String fecha_hora_inicio;
         private String estado;
@@ -18,6 +18,7 @@ public class CirugiaDTO {
         private String tipo;
         private PacienteDto.BackResponse paciente;    
         private QuirofanoDto quirofano;
+        private ServicioDto servicio;
     }
 
     @Data
@@ -27,6 +28,7 @@ public class CirugiaDTO {
         private String paciente;
         private String dni;
         private String servicio;
+        private Long servicioId;
         private String prioridad;
         private String fechaInicio;
         private String horaInicio;

@@ -66,6 +66,7 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService {
 	public ResponseEntity<Void> deleteCirugia(Long id) throws Exception {
 
 		return apiBackendCirugiaClient.delete(id);
+		
 	}
 
 	@Override

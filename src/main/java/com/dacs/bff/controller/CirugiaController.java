@@ -27,8 +27,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
 
 @Slf4j
+@Validated
 @RestController
 @RequestMapping("/cirugia")
 public class CirugiaController {
@@ -60,7 +63,7 @@ public class CirugiaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable @NotNull Long id) {
         try {
             cirugiaService.deleteCirugia(id);
             return ApiResponseBuilder.ok(null, "Cirugia eliminada exitosamente");

@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.dacs.bff.dto.CirugiaDTO;
+import com.dacs.bff.dto.CirugiaDTO.BackResponse;
+import com.dacs.bff.dto.CirugiaDTO.FrontResponse;
 import com.dacs.bff.dto.MiembroEquipoDTO;
 import com.dacs.bff.dto.PaginatedResponse;
 import com.dacs.bff.dto.ServicioDto;
@@ -15,10 +17,7 @@ public interface ApiBackendCirugiaService {
 
     public PaginatedResponse<CirugiaDTO.FrontResponse> getCirugias(Integer page, Integer size);
 
-    public CirugiaDTO.FrontResponse createCirugia(CirugiaDTO.Create cirugia) throws Exception;
-
-    public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.Update cirugia)
-            throws Exception;
+    public CirugiaDTO.FrontResponse createCirugia(CirugiaDTO.BackResponse cirugia) throws Exception;
 
     public ResponseEntity<Void> deleteCirugia(Long id) throws Exception;
 
@@ -30,4 +29,6 @@ public interface ApiBackendCirugiaService {
     public ResponseEntity<List<LocalDateTime>> getTurnosDisponibles(int cantidadProximosDias, Long servicioId);
 
     public ResponseEntity<List<ServicioDto>> getServicios();
+
+    public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.BackResponse cirugia) throws Exception;
 }

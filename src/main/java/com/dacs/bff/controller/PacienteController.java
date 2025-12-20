@@ -38,7 +38,7 @@ public class PacienteController {
 
     // Paginación + filtro opcional
     @GetMapping("")
-    public ResponseEntity<ApiResponse<List<PacienteDto.FrontResponse>>> getPacientes(
+    public ResponseEntity<ApiResponse<PaginatedResponse<PacienteDto.FrontResponse>>> getPacientes(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "16") int size,
             @RequestParam(name = "search", required = false) String search) {
@@ -49,7 +49,7 @@ public class PacienteController {
     }
 
     @GetMapping("/lite")
-    public ResponseEntity<ApiResponse<List<PacienteDto.FrontResponseLite>>> getPacientesLite(
+    public ResponseEntity<ApiResponse<PaginatedResponse<PacienteDto.FrontResponseLite>>> getPacientesLite(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "16") int size,
             @RequestParam(name = "search", required = false) String search) {

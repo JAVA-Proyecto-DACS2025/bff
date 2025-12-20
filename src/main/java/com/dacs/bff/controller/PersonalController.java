@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dacs.bff.dto.ApiResponse;
 import com.dacs.bff.dto.PaginatedResponse;
-import com.dacs.bff.dto.Pagination;
 import com.dacs.bff.dto.PersonalDto;
 import com.dacs.bff.service.ApiBackendPersonalService;
+import com.dacs.bff.util.ApiResponseBuilder;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,29 +33,12 @@ public class PersonalController {
     private ApiBackendPersonalService personalService;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse<List<PersonalDto.BackResponse>>> getPersonal(
+    public ResponseEntity<ApiResponse<PaginatedResponse<PersonalDto.BackResponse>>> getPersonal(
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size,
             @RequestParam(name = "param", required = false) String param) throws Exception {
         PaginatedResponse<PersonalDto.BackResponse> backend = personalService.getPersonal(page, size, param);
-
-        ApiResponse<List<PersonalDto.BackResponse>> resp = new ApiResponse<>(); // MOVER a servicio o helper
-        resp.setSuccess(true);
-        resp.setData(backend.getContent());
-        resp.setMessage(null);
-        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
-        resp.setRequestId(java.util.UUID.randomUUID().toString());
-
-        Pagination p = new Pagination();
-        p.setPage(backend.getNumber());
-        p.setPageSize(backend.getSize());
-        p.setTotalItems(backend.getTotalElements());
-        p.setTotalPages(backend.getTotalPages());
-        p.setHasNext(backend.getNumber() < backend.getTotalPages() - 1);
-        p.setHasPrevious(backend.getNumber() > 0);
-        resp.setPagination(p);
-
-        return new ResponseEntity<>(resp, HttpStatus.OK);
+        return ApiResponseBuilder.okWithPagination(backend);
     }
 
     @PostMapping("")
@@ -77,54 +60,26 @@ public class PersonalController {
     public ResponseEntity<ApiResponse<PersonalDto.BackResponse>> updatePersonal(@PathVariable Long id,
             @RequestBody PersonalDto.Update personalRequestDto) throws Exception {
         PersonalDto.BackResponse entity = personalService.update(id, personalRequestDto);
-
-        ApiResponse<PersonalDto.BackResponse> resp = new ApiResponse<>();
-        resp.setSuccess(true);
-        resp.setData(entity);
-        resp.setMessage(null);
-        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
-        resp.setRequestId(java.util.UUID.randomUUID().toString());
-
-        return new ResponseEntity<>(resp, HttpStatus.OK);
-
+        return ApiResponseBuilder.ok(entity);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deletePersonal(@PathVariable Long id) throws Exception {
         ResponseEntity<Void> backResponse = personalService.delete(id);
-        ApiResponse<Void> resp = new ApiResponse<Void>();
-        resp.setSuccess(backResponse.getStatusCode().is2xxSuccessful());
-        resp.setData(null);
-        resp.setMessage(null);
-        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
-        resp.setRequestId(java.util.UUID.randomUUID().toString());
-        return new ResponseEntity<>(resp, HttpStatus.OK);
+        if (backResponse.getStatusCode().is2xxSuccessful()) {
+            return ApiResponseBuilder.ok(null, "Personal eliminado exitosamente");
+        } else {
+            return ApiResponseBuilder.serverError("No se pudo eliminar el personal");
+        }
     }
 
     @GetMapping("/resumen")
-    public ResponseEntity<ApiResponse<List<PersonalDto.FrontResponseLite>>> getPersonalLite(
+    public ResponseEntity<ApiResponse<PaginatedResponse<PersonalDto.FrontResponseLite>>> getPersonalLite(
             @RequestParam(name = "page") Integer page,
             @RequestParam(name = "size") Integer size,
             @RequestParam(name = "param", required = false) String param) {
-        PaginatedResponse<PersonalDto.FrontResponseLite> results = personalService.getPersonalLite(page, size,
-                param);
-
-        ApiResponse<List<PersonalDto.FrontResponseLite>> resp = new ApiResponse<>();
-        resp.setSuccess(true);
-        resp.setData(results.getContent());
-        resp.setMessage(null);
-        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
-        resp.setRequestId(java.util.UUID.randomUUID().toString());
-        Pagination p = new Pagination();
-        p.setPage(results.getNumber());
-        p.setPageSize(results.getSize());
-        p.setTotalItems(results.getTotalElements());
-        p.setTotalPages(results.getTotalPages());
-        p.setHasNext(results.getNumber() < results.getTotalPages() - 1);
-        p.setHasPrevious(results.getNumber() > 0);
-        resp.setPagination(p);
-
-        return new ResponseEntity<>(resp, HttpStatus.OK);
+        PaginatedResponse<PersonalDto.FrontResponseLite> results = personalService.getPersonalLite(page, size, param);
+        return ApiResponseBuilder.okWithPagination(results);
     }
 
 }

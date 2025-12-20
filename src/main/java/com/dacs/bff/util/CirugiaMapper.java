@@ -28,7 +28,7 @@ public class CirugiaMapper {
         if (backResp.getServicio() != null) {
             front.setServicioId(backResp.getServicio().getId());
             if (backResp.getServicio().getNombre() != null) {
-                front.setServicio(backResp.getServicio().getNombre());
+                front.setServicioNombre(backResp.getServicio().getNombre());
             }
         }
 
@@ -40,17 +40,17 @@ public class CirugiaMapper {
             String nombrePaciente = backResp.getPaciente().getNombre();
             String apellidoPaciente = backResp.getPaciente().getApellido();
             if (nombrePaciente != null && apellidoPaciente != null) {
-                front.setPaciente(nombrePaciente + " " + apellidoPaciente);
+                front.setPacienteNombre(nombrePaciente + " " + apellidoPaciente);
             } else if (nombrePaciente != null) {
-                front.setPaciente(nombrePaciente);
+                front.setPacienteNombre(nombrePaciente);
             } else {
-                front.setPaciente(apellidoPaciente);
+                front.setPacienteNombre(apellidoPaciente);
             }
         }
 
         // Extraer fecha y hora
         if (backResp.getFecha_hora_inicio() != null) {
-            String fechaHoraCompleta = backResp.getFecha_hora_inicio();
+            String fechaHoraCompleta = backResp.getFecha_hora_inicio().toString();
             try {
                 // parsear formato ISO 8601 (ej: 2025-12-07T14:30:45.123Z)
                 java.time.OffsetDateTime odt = java.time.OffsetDateTime.parse(fechaHoraCompleta);
@@ -82,7 +82,7 @@ public class CirugiaMapper {
 
         // extraer nombre del quirófano (asume que QuirofanoDto tiene getNombre())
         if (backResp.getQuirofano() != null && backResp.getQuirofano().getNombre() != null) {
-            front.setQuirofano(backResp.getQuirofano().getNombre());
+            front.setQuirofanoNombre(backResp.getQuirofano().getNombre());
             front.setQuirofanoId(Long.valueOf(backResp.getQuirofano().getId()));
         }
 

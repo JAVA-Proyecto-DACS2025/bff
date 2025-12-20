@@ -44,22 +44,14 @@ public class ApiResponseBuilder {
         return buildResponse(null, HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
 
-    public static <T> ResponseEntity<ApiResponse<List<T>>> okWithPagination(PaginatedResponse<T> pageResp) {
-        ApiResponse<List<T>> resp = new ApiResponse<>();
+    public static <T> ResponseEntity<ApiResponse<PaginatedResponse<T>>> okWithPagination(
+            PaginatedResponse<T> pageResp) {
+        ApiResponse<PaginatedResponse<T>> resp = new ApiResponse<>();
         resp.setSuccess(true);
-        resp.setData(pageResp.getContent());
+        resp.setData(pageResp); // aquí va todo el objeto paginado
         resp.setMessage(null);
         resp.setTimestamp(OffsetDateTime.now().toString());
         resp.setRequestId(UUID.randomUUID().toString());
-
-        // llenar metadatos de paginación
-        var pagination = new com.dacs.bff.dto.Pagination();
-        pagination.setPage(pageResp.getNumber());
-        pagination.setPageSize(pageResp.getSize());
-        pagination.setTotalItems(pageResp.getTotalElements());
-        pagination.setTotalPages(pageResp.getTotalPages());
-        resp.setPagination(pagination);
-
         return new ResponseEntity<>(resp, HttpStatus.OK);
     }
 }

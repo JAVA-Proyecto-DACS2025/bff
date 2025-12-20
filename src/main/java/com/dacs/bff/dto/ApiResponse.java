@@ -9,5 +9,5 @@ public class ApiResponse<T> {
     private String message;
     private String timestamp;
     private String requestId;
-    private Pagination pagination;
+
 }

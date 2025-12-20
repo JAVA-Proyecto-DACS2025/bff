@@ -7,23 +7,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dacs.bff.dto.MiembroEquipoDTO;
 import com.dacs.bff.dto.ApiResponse;
 import com.dacs.bff.dto.CirugiaDTO;
-import com.dacs.bff.dto.PacienteDto;
 import com.dacs.bff.dto.PaginatedResponse;
-import com.dacs.bff.dto.Pagination;
+
 import com.dacs.bff.dto.ServicioDto;
 // import com.dacs.bff.dto.CirugiaPageResponse;
 import com.dacs.bff.service.ApiBackendCirugiaService;
 import com.dacs.bff.util.ApiResponseBuilder;
 
-import feign.Response;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +37,7 @@ public class CirugiaController {
     private ApiBackendCirugiaService cirugiaService;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse<List<CirugiaDTO.FrontResponse>>> getAll(
+    public ResponseEntity<ApiResponse<PaginatedResponse<CirugiaDTO.FrontResponse>>> getAll(
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size) {
         PaginatedResponse<CirugiaDTO.FrontResponse> resp = cirugiaService.getCirugias(page, size);
@@ -49,7 +45,7 @@ public class CirugiaController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> create(@RequestBody CirugiaDTO.Create cirugiaDTO)
+    public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> create(@RequestBody CirugiaDTO.BackResponse cirugiaDTO)
             throws Exception {
         CirugiaDTO.FrontResponse data = cirugiaService.createCirugia(cirugiaDTO);
         return ApiResponseBuilder.created(data, "Cirugia creada exitosamente");
@@ -57,7 +53,7 @@ public class CirugiaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> update(@PathVariable String id,
-            @RequestBody CirugiaDTO.Update cirugiaDTO) throws Exception {
+            @RequestBody CirugiaDTO.BackResponse cirugiaDTO) throws Exception {
 
         ResponseEntity<CirugiaDTO.FrontResponse> data = cirugiaService.updateCirugia(id, cirugiaDTO);
         return ApiResponseBuilder.ok(data.getBody(), "Cirugia actualizada exitosamente");

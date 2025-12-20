@@ -36,18 +36,20 @@ public interface ApiBackendCirugiasClient {
         @PutMapping("/cirugia/{id}")
         ResponseEntity<CirugiaDTO.BackResponse> update(@PathVariable("id") String id,
                         @RequestBody CirugiaDTO.BackResponse cirugia);
+
         @DeleteMapping("/cirugia/{id}")
         ResponseEntity<Void> delete(@PathVariable("id") Long id);
 
         @GetMapping("/cirugia/{id}/equipo-medico")
-       ResponseEntity<List<MiembroEquipoDTO.BackResponse>> getEquipoMedico(@PathVariable("id") Long id);
+        ResponseEntity<List<MiembroEquipoDTO.BackResponse>> getEquipoMedico(@PathVariable("id") Long id);
 
         @PostMapping("/cirugia/{id}/equipo-medico")
         ResponseEntity<List<MiembroEquipoDTO.BackResponse>> saveEquipoMedico(@PathVariable("id") Long id,
                         @RequestBody List<MiembroEquipoDTO.Create> miembros);
 
         @GetMapping("/cirugia/horarios-disponibles")
-        ResponseEntity<List<LocalDateTime>> getTurnosDisponibles(@RequestParam(name = "cantidadProximosDias") int cantidadProximosDias,
+        ResponseEntity<List<LocalDateTime>> getTurnosDisponibles(
+                        @RequestParam(name = "cantidadProximosDias") int cantidadProximosDias,
                         @RequestParam(name = "servicioId") Long servicioId);
 
         @GetMapping("/cirugia/servicios")

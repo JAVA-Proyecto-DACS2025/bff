@@ -21,14 +21,14 @@ public interface ApiBackendCirugiaService {
 
     public ResponseEntity<Void> deleteCirugia(Long id) throws Exception;
 
-    public ResponseEntity<List<MiembroEquipoDTO.BackResponse>> getEquipoMedico(Long id);
+    public List<MiembroEquipoDTO.Response> getEquipoMedico(Long id);
 
-    public ResponseEntity<List<MiembroEquipoDTO.BackResponse>> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros,
-            Long id);
+    public List<MiembroEquipoDTO.Response> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros, Long id);
 
     public ResponseEntity<List<LocalDateTime>> getTurnosDisponibles(int cantidadProximosDias, Long servicioId);
 
     public ResponseEntity<List<ServicioDto>> getServicios();
 
-    public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.BackResponse cirugia) throws Exception;
+    public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.BackResponse cirugia)
+            throws Exception;
 }

@@ -5,6 +5,8 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.dacs.bff.dto.PacienteDto;
+import com.dacs.bff.dto.MiembroEquipoDTO;
+
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -16,7 +18,7 @@ public class ModelMapperConfig {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-        // BackResponse -> FrontResponse (con cálculo de edad)
+        // BackResponse -> FrontResponse (incluye cálculo de edad)
         modelMapper.typeMap(PacienteDto.BackResponse.class, PacienteDto.FrontResponse.class)
             .addMappings(mapper -> {
                 // Calcular edad desde fechaNacimiento
@@ -38,6 +40,16 @@ public class ModelMapperConfig {
         modelMapper.typeMap(PacienteDto.FrontResponse.class, PacienteDto.BackResponse.class)
             .addMappings(mapper -> {
                 mapper.skip(PacienteDto.BackResponse::setId); // opcional: evitar sobreescribir ID
+            });
+
+        // MiembroEquipoDTO mapping (nuevo)
+        modelMapper.typeMap(MiembroEquipoDTO.BackResponse.class, MiembroEquipoDTO.Response.class)
+            .addMappings(mapper -> {
+                mapper.map(src -> src.getPersonal().getLegajo(), MiembroEquipoDTO.Response::setLegajo);
+                mapper.map(src -> src.getPersonal().getNombre(), MiembroEquipoDTO.Response::setNombre);
+                mapper.map(src -> src.getPersonal().getId(), MiembroEquipoDTO.Response::setPersonalId);
+                mapper.map(MiembroEquipoDTO.BackResponse::getCirugiaId, MiembroEquipoDTO.Response::setCirugiaId);
+                mapper.map(MiembroEquipoDTO.BackResponse::getRol, MiembroEquipoDTO.Response::setRol);
             });
 
         return modelMapper;

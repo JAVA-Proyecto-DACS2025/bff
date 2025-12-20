@@ -71,30 +71,14 @@ public class CirugiaController {
 
     @GetMapping("/{id}/equipo-medico")
     public ResponseEntity<ApiResponse<List<MiembroEquipoDTO.Response>>> getEquipoMedico(@PathVariable Long id) {
-        List<MiembroEquipoDTO.Response> data = cirugiaService.getEquipoMedico(id).getBody().stream().map(back -> {
-            MiembroEquipoDTO.Response dto = new MiembroEquipoDTO.Response();
-            dto.setCirugiaId(back.getCirugiaId());
-            dto.setPersonalId(back.getPersonal().getId());
-            dto.setLegajo(back.getPersonal().getLegajo());
-            dto.setNombre(back.getPersonal().getNombre());
-            dto.setRol(back.getRol());
-            return dto;
-        }).toList();
+        List<MiembroEquipoDTO.Response> data = cirugiaService.getEquipoMedico(id);
         return ApiResponseBuilder.ok(data);
     }
 
     @PostMapping("/{id}/equipo-medico")
     public ResponseEntity<ApiResponse<List<MiembroEquipoDTO.Response>>> postEquipoMedico(@PathVariable Long id,
             @RequestBody List<MiembroEquipoDTO.Create> miembros) {
-        List<MiembroEquipoDTO.Response> data = cirugiaService.saveEquipoMedico(miembros, id).getBody().stream().map(back -> {
-            MiembroEquipoDTO.Response dto = new MiembroEquipoDTO.Response();
-            dto.setCirugiaId(back.getCirugiaId());
-            dto.setPersonalId(back.getPersonal().getId());
-            dto.setLegajo(back.getPersonal().getLegajo());
-            dto.setNombre(back.getPersonal().getNombre());
-            dto.setRol(back.getRol());
-            return dto;
-        }).toList();
+        List<MiembroEquipoDTO.Response> data = cirugiaService.saveEquipoMedico(miembros, id);
         return ApiResponseBuilder.ok(data, "Equipo medico guardado exitosamente");
     }
 

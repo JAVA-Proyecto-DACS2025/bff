@@ -33,19 +33,17 @@ public class PacienteController {
     @Autowired
     private ApiBackendPacienteService pacienteService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    // Paginación + filtro opcional
     @GetMapping("")
     public ResponseEntity<ApiResponse<PaginatedResponse<PacienteDto.FrontResponse>>> getPacientes(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "16") int size,
             @RequestParam(name = "search", required = false) String search) {
-
-        PaginatedResponse<PacienteDto.FrontResponse> data = pacienteService.getPacientesByPage(page, size, search);
-
-        return ApiResponseBuilder.okWithPagination(data);
+        try {
+            PaginatedResponse<PacienteDto.FrontResponse> data = pacienteService.getPacientesByPage(page, size, search);
+            return ApiResponseBuilder.okWithPagination(data);
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al obtener pacientes: " + e.getMessage());
+        }
     }
 
     @GetMapping("/lite")
@@ -53,26 +51,43 @@ public class PacienteController {
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "16") int size,
             @RequestParam(name = "search", required = false) String search) {
-
-        PaginatedResponse<PacienteDto.FrontResponseLite> data = pacienteService.getPacientesLite(page, size, search);;
-        return ApiResponseBuilder.okWithPagination(data);
+        try {
+            PaginatedResponse<PacienteDto.FrontResponseLite> data = pacienteService.getPacientesLite(page, size, search);
+            return ApiResponseBuilder.okWithPagination(data);
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al obtener pacientes lite: " + e.getMessage());
+        }
     }
 
     @PostMapping("")
-    public ResponseEntity<PacienteDto.FrontResponse> save(@RequestBody PacienteDto.FrontResponse pacienteDto)
+    public ResponseEntity<ApiResponse<PacienteDto.FrontResponse>> create(@RequestBody PacienteDto.FrontResponse pacienteDto)
             throws Exception {
-        PacienteDto.FrontResponse data = pacienteService.savePaciente(pacienteDto);
-        return new ResponseEntity<>(data, HttpStatus.CREATED);
+        try {
+            PacienteDto.FrontResponse data = pacienteService.savePaciente(pacienteDto);
+            return ApiResponseBuilder.created(data, "Paciente creado exitosamente");
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al crear el paciente: " + e.getMessage());
+        }
     }
 
+    // Obtiene los pacientes desde la api externa del conector
     @GetMapping("/hospital")
-    public List<PacienteDto.FrontResponse> getPacientesHospital(@RequestParam("cantidad") int cantidad) {
-        return pacienteService.getPacientesHospital(cantidad);
+    public ResponseEntity<ApiResponse<List<PacienteDto.FrontResponse>>> getPacientesHospital(@RequestParam("cantidad") int cantidad) {
+        try {
+            ResponseEntity<List<PacienteDto.FrontResponse>> response = pacienteService.getPacientesHospital(cantidad);
+            return ApiResponseBuilder.ok(response.getBody(), "Pacientes hospital obtenidos exitosamente");
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al obtener pacientes hospital: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable("id") Long id) throws Exception {
-        ResponseEntity<Void> backResponse = pacienteService.deletePaciente(id);
-        return new ResponseEntity<>(backResponse.getStatusCode());
+        try {
+            pacienteService.deletePaciente(id);
+            return ApiResponseBuilder.ok(null, "Paciente eliminado exitosamente");
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al eliminar el paciente: " + e.getMessage());
+        }
     }
 }

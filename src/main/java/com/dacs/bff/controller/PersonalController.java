@@ -37,39 +37,47 @@ public class PersonalController {
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size,
             @RequestParam(name = "param", required = false) String param) throws Exception {
-        PaginatedResponse<PersonalDto.BackResponse> backend = personalService.getPersonal(page, size, param);
-        return ApiResponseBuilder.okWithPagination(backend);
+        try {
+            PaginatedResponse<PersonalDto.BackResponse> backend = personalService.getPersonal(page, size, param);
+            return ApiResponseBuilder.okWithPagination(backend);
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al obtener personal: " + e.getMessage());
+        }
     }
 
     @PostMapping("")
     public ResponseEntity<ApiResponse<PersonalDto.BackResponse>> createPersonal(
-            @RequestBody PersonalDto.Create personalRequestDto) throws Exception { /// ARREGLAR EL MAPEADO
-        PersonalDto.BackResponse entity = personalService.create(personalRequestDto);
-
-        ApiResponse<PersonalDto.BackResponse> resp = new ApiResponse<>();
-        resp.setSuccess(true);
-        resp.setData(entity);
-        resp.setMessage(null);
-        resp.setTimestamp(java.time.OffsetDateTime.now().toString());
-        resp.setRequestId(java.util.UUID.randomUUID().toString());
-
-        return new ResponseEntity<>(resp, HttpStatus.CREATED);
+            @RequestBody PersonalDto.Create personalRequestDto) throws Exception {
+        try {
+           ResponseEntity<PersonalDto.BackResponse> response = personalService.create(personalRequestDto);
+            return ApiResponseBuilder.created(response.getBody(), "Personal creado exitosamente");
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al crear personal: " + e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<PersonalDto.BackResponse>> updatePersonal(@PathVariable Long id,
             @RequestBody PersonalDto.Update personalRequestDto) throws Exception {
-        PersonalDto.BackResponse entity = personalService.update(id, personalRequestDto);
-        return ApiResponseBuilder.ok(entity);
+        try {
+            ResponseEntity<PersonalDto.BackResponse> response = personalService.update(id, personalRequestDto);
+            return ApiResponseBuilder.ok(response.getBody(), "Personal actualizado exitosamente");
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al actualizar personal: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deletePersonal(@PathVariable Long id) throws Exception {
-        ResponseEntity<Void> backResponse = personalService.delete(id);
-        if (backResponse.getStatusCode().is2xxSuccessful()) {
-            return ApiResponseBuilder.ok(null, "Personal eliminado exitosamente");
-        } else {
-            return ApiResponseBuilder.serverError("No se pudo eliminar el personal");
+        try {
+            ResponseEntity<Void> backResponse = personalService.delete(id);
+            if (backResponse.getStatusCode().is2xxSuccessful()) {
+                return ApiResponseBuilder.ok(null, "Personal eliminado exitosamente");
+            } else {
+                return ApiResponseBuilder.serverError("No se pudo eliminar el personal");
+            }
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al eliminar personal: " + e.getMessage());
         }
     }
 
@@ -78,8 +86,12 @@ public class PersonalController {
             @RequestParam(name = "page") Integer page,
             @RequestParam(name = "size") Integer size,
             @RequestParam(name = "param", required = false) String param) {
-        PaginatedResponse<PersonalDto.FrontResponseLite> results = personalService.getPersonalLite(page, size, param);
-        return ApiResponseBuilder.okWithPagination(results);
+        try {
+            PaginatedResponse<PersonalDto.FrontResponseLite> results = personalService.getPersonalLite(page, size, param);
+            return ApiResponseBuilder.okWithPagination(results);
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al obtener personal lite: " + e.getMessage());
+        }
     }
 
 }

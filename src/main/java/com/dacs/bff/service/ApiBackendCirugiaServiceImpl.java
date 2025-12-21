@@ -31,34 +31,26 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService {
 	@Override
 	public PaginatedResponse<CirugiaDTO.FrontResponse> getCirugias(Integer page, Integer size) {
 		PaginatedResponse<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.cirugias(page, size);
-
-		// mapear cada elemento de la lista
 		List<CirugiaDTO.FrontResponse> frontList = backResp.getContent().stream()
-				.map(item -> cirugiaMapper.toFrontResponse(item)) // usar instancia inyectada
-				.collect(java.util.stream.Collectors.toList());
-
-		// construir response con la lista mapeada
-		PaginatedResponse<CirugiaDTO.FrontResponse> frontResp = new PaginatedResponse<>();
-		frontResp.setContent(frontList);
-		frontResp.setNumber(backResp.getNumber());
-		frontResp.setSize(backResp.getSize());
-		frontResp.setTotalElements(backResp.getTotalElements());
-		frontResp.setTotalPages(backResp.getTotalPages());
-
-		return frontResp;
+				.map(item -> cirugiaMapper.toFrontResponse(item))
+				.toList();
+		return com.dacs.bff.util.PaginatedResponseUtil.build(backResp, frontList);
 	}
 
 	@Override
-	public CirugiaDTO.FrontResponse createCirugia(CirugiaDTO.BackResponse cirugia) throws Exception {
+	public ResponseEntity<CirugiaDTO.FrontResponse> createCirugia(CirugiaDTO.FrontResponse cirugia) throws Exception {
 
-		ResponseEntity<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.create(cirugia);
-		return cirugiaMapper.toFrontResponse(backResp.getBody());
+		CirugiaDTO.FrontRequest request = cirugiaMapper.toFrontRequest(cirugia);
+		System.err.println("Request to backend: " + request);
+		ResponseEntity<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.create(request);
+		return ResponseEntity.status(backResp.getStatusCode()).body(cirugiaMapper.toFrontResponse(backResp.getBody()));
 	}
 
 	@Override
-	public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.BackResponse cirugia)
+	public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.FrontResponse cirugia)
 			throws Exception {
-		ResponseEntity<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.update(id, cirugia);
+		CirugiaDTO.FrontRequest request = cirugiaMapper.toFrontRequest(cirugia);
+		ResponseEntity<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.update(id, request);
 		return ResponseEntity.status(backResp.getStatusCode()).body(cirugiaMapper.toFrontResponse(backResp.getBody()));
 	}
 
@@ -70,19 +62,21 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService {
 	}
 
 	@Override
-	public List<MiembroEquipoDTO.Response> getEquipoMedico(Long id) {
+	public ResponseEntity<List<MiembroEquipoDTO.Response>> getEquipoMedico(Long id) {
 		ResponseEntity<List<MiembroEquipoDTO.BackResponse>> response = apiBackendCirugiaClient.getEquipoMedico(id);
-		return response.getBody().stream()
-			.map(back -> modelMapper.map(back, MiembroEquipoDTO.Response.class))
-			.toList();
+		return ResponseEntity.status(response.getStatusCode())
+			.body(response.getBody().stream()
+				.map(back -> modelMapper.map(back, MiembroEquipoDTO.Response.class))
+				.toList());
 	}
 
 	@Override
-	public List<MiembroEquipoDTO.Response> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros, Long id) {
+	public ResponseEntity<List<MiembroEquipoDTO.Response>> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros, Long id) {
 		ResponseEntity<List<MiembroEquipoDTO.BackResponse>> response = apiBackendCirugiaClient.saveEquipoMedico(id, miembros);
-		return response.getBody().stream()
-			.map(back -> modelMapper.map(back, MiembroEquipoDTO.Response.class))
-			.toList();
+		return ResponseEntity.status(response.getStatusCode())
+			.body(response.getBody().stream()
+				.map(back -> modelMapper.map(back, MiembroEquipoDTO.Response.class))
+				.toList())	;
 	}
 
 	@Override

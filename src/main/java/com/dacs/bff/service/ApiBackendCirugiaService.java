@@ -17,18 +17,18 @@ public interface ApiBackendCirugiaService {
 
     public PaginatedResponse<CirugiaDTO.FrontResponse> getCirugias(Integer page, Integer size);
 
-    public CirugiaDTO.FrontResponse createCirugia(CirugiaDTO.BackResponse cirugia) throws Exception;
+    public ResponseEntity<CirugiaDTO.FrontResponse> createCirugia(CirugiaDTO.FrontResponse cirugia) throws Exception;
 
     public ResponseEntity<Void> deleteCirugia(Long id) throws Exception;
 
-    public List<MiembroEquipoDTO.Response> getEquipoMedico(Long id);
+    public ResponseEntity<List<MiembroEquipoDTO.Response>> getEquipoMedico(Long id);
 
-    public List<MiembroEquipoDTO.Response> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros, Long id);
+    public ResponseEntity<List<MiembroEquipoDTO.Response>> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros, Long id);
 
     public ResponseEntity<List<LocalDateTime>> getTurnosDisponibles(int cantidadProximosDias, Long servicioId);
 
     public ResponseEntity<List<ServicioDto>> getServicios();
 
-    public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.BackResponse cirugia)
+    public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.FrontResponse cirugia)
             throws Exception;
 }

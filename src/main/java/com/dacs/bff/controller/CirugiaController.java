@@ -43,23 +43,34 @@ public class CirugiaController {
     public ResponseEntity<ApiResponse<PaginatedResponse<CirugiaDTO.FrontResponse>>> getAll(
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size) {
-        PaginatedResponse<CirugiaDTO.FrontResponse> resp = cirugiaService.getCirugias(page, size);
-        return ApiResponseBuilder.okWithPagination(resp);
+        try {
+            PaginatedResponse<CirugiaDTO.FrontResponse> resp = cirugiaService.getCirugias(page, size);
+            return ApiResponseBuilder.okWithPagination(resp);
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al obtener cirugías: " + e.getMessage());
+        }
     }
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> create(@RequestBody CirugiaDTO.BackResponse cirugiaDTO)
+    public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> create(@RequestBody CirugiaDTO.FrontResponse cirugiaDTO)
             throws Exception {
-        CirugiaDTO.FrontResponse data = cirugiaService.createCirugia(cirugiaDTO);
-        return ApiResponseBuilder.created(data, "Cirugia creada exitosamente");
+        try {
+            ResponseEntity<CirugiaDTO.FrontResponse> response = cirugiaService.createCirugia(cirugiaDTO);
+            return ApiResponseBuilder.created(response.getBody(), "Cirugia creada exitosamente");
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al crear la cirugía: " + e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> update(@PathVariable String id,
-            @RequestBody CirugiaDTO.BackResponse cirugiaDTO) throws Exception {
-
-        ResponseEntity<CirugiaDTO.FrontResponse> data = cirugiaService.updateCirugia(id, cirugiaDTO);
-        return ApiResponseBuilder.ok(data.getBody(), "Cirugia actualizada exitosamente");
+            @RequestBody CirugiaDTO.FrontResponse cirugiaDTO) throws Exception {
+        try {
+            ResponseEntity<CirugiaDTO.FrontResponse> data = cirugiaService.updateCirugia(id, cirugiaDTO);
+            return ApiResponseBuilder.ok(data.getBody(), "Cirugia actualizada exitosamente");
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al actualizar la cirugía: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -74,28 +85,44 @@ public class CirugiaController {
 
     @GetMapping("/{id}/equipo-medico")
     public ResponseEntity<ApiResponse<List<MiembroEquipoDTO.Response>>> getEquipoMedico(@PathVariable Long id) {
-        List<MiembroEquipoDTO.Response> data = cirugiaService.getEquipoMedico(id);
-        return ApiResponseBuilder.ok(data);
+        try {
+            ResponseEntity<List<MiembroEquipoDTO.Response>> response = cirugiaService.getEquipoMedico(id);
+            return ApiResponseBuilder.ok(response.getBody());
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al obtener equipo médico: " + e.getMessage());
+        }
     }
 
     @PostMapping("/{id}/equipo-medico")
     public ResponseEntity<ApiResponse<List<MiembroEquipoDTO.Response>>> postEquipoMedico(@PathVariable Long id,
             @RequestBody List<MiembroEquipoDTO.Create> miembros) {
-        List<MiembroEquipoDTO.Response> data = cirugiaService.saveEquipoMedico(miembros, id);
-        return ApiResponseBuilder.ok(data, "Equipo medico guardado exitosamente");
+        try {
+            ResponseEntity<List<MiembroEquipoDTO.Response>> response = cirugiaService.saveEquipoMedico(miembros, id);
+            return ApiResponseBuilder.ok(response.getBody(), "Equipo medico guardado exitosamente");
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al guardar equipo médico: " + e.getMessage());
+        }
     }
 
     @GetMapping("/horarios-disponibles")
     public ResponseEntity<ApiResponse<List<LocalDateTime>>> getHorariosDisponibles(
             @RequestParam int cantidadProximosDias, @RequestParam Long servicioId) {
-        ResponseEntity<List<LocalDateTime>> horarios = cirugiaService.getTurnosDisponibles(cantidadProximosDias,
-                servicioId);
-        return ApiResponseBuilder.ok(horarios.getBody());
+        try {
+            ResponseEntity<List<LocalDateTime>> horarios = cirugiaService.getTurnosDisponibles(cantidadProximosDias,
+                    servicioId);
+            return ApiResponseBuilder.ok(horarios.getBody());
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al obtener horarios disponibles: " + e.getMessage());
+        }
     }
 
     @GetMapping("/servicios")
     public ResponseEntity<ApiResponse<List<ServicioDto>>> getServicios() {
-        ResponseEntity<List<ServicioDto>> servicios = cirugiaService.getServicios();
-        return ApiResponseBuilder.ok(servicios.getBody());
+        try {
+            ResponseEntity<List<ServicioDto>> servicios = cirugiaService.getServicios();
+            return ApiResponseBuilder.ok(servicios.getBody());
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al obtener servicios: " + e.getMessage());
+        }
     }
 }

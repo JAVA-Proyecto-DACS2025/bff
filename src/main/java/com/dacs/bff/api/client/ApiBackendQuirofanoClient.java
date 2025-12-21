@@ -3,6 +3,7 @@ package com.dacs.bff.api.client;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,15 +24,15 @@ import com.dacs.bff.dto.QuirofanoDto;
 public interface ApiBackendQuirofanoClient {
 
     @GetMapping("/quirofano")
-    List<QuirofanoDto> quirofanos();
+    ResponseEntity<List<QuirofanoDto>> quirofanos();
 
     @PostMapping("/quirofano")
-    QuirofanoDto save(@RequestBody QuirofanoDto quirofano);
+    ResponseEntity<QuirofanoDto> save(@RequestBody QuirofanoDto quirofano);
     
     @PutMapping("/quirofano")
-    QuirofanoDto update(@RequestBody QuirofanoDto quirofano);
+    ResponseEntity<QuirofanoDto> update(@RequestBody QuirofanoDto quirofano);
 
     @DeleteMapping("/quirofano/{id}")
-    QuirofanoDto delete(@PathVariable("id") Long id);
+    ResponseEntity<QuirofanoDto> delete(@PathVariable("id") Long id);
 }
 

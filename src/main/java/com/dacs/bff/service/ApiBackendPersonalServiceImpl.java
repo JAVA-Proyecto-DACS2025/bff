@@ -22,12 +22,12 @@ public class ApiBackendPersonalServiceImpl implements ApiBackendPersonalService 
     }
 
     @Override
-    public PersonalDto.BackResponse create(PersonalDto.Create personalRequestDto) {
+    public ResponseEntity<PersonalDto.BackResponse> create(PersonalDto.Create personalRequestDto) {
         return apiBackendPersonalClient.create(personalRequestDto);
     }
 
     @Override
-    public PersonalDto.BackResponse update(Long id, PersonalDto.Update personalRequestDto) {
+    public ResponseEntity<PersonalDto.BackResponse> update(Long id, PersonalDto.Update personalRequestDto) {
         return apiBackendPersonalClient.update(id, personalRequestDto);
     }
 
@@ -40,8 +40,7 @@ public class ApiBackendPersonalServiceImpl implements ApiBackendPersonalService 
     @Override
     public PaginatedResponse<PersonalDto.FrontResponseLite> getPersonalLite(Integer page, Integer size, String param) {
         PaginatedResponse<PersonalDto.BackResponse> backResp = apiBackendPersonalClient.getPersonal(page, size, param);
-        PaginatedResponse<PersonalDto.FrontResponseLite> frontResp = new PaginatedResponse<>();
-        frontResp.setContent(backResp.getContent().stream()
+        List<PersonalDto.FrontResponseLite> mappedContent = backResp.getContent().stream()
                 .map(back -> {
                     PersonalDto.FrontResponseLite front = new PersonalDto.FrontResponseLite();
                     front.setId(back.getId());
@@ -51,11 +50,7 @@ public class ApiBackendPersonalServiceImpl implements ApiBackendPersonalService 
                     front.setRol(back.getRol());
                     return front;
                 })
-                .toList());
-        frontResp.setNumber(backResp.getNumber());
-        frontResp.setSize(backResp.getSize());
-        frontResp.setTotalElements(backResp.getTotalElements());
-        frontResp.setTotalPages(backResp.getTotalPages());
-        return frontResp;
-    } 
+                .toList();
+        return com.dacs.bff.util.PaginatedResponseUtil.build(backResp, mappedContent);
+    }
 }

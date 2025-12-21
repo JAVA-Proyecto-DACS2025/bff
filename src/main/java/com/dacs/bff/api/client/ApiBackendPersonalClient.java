@@ -25,10 +25,10 @@ public interface ApiBackendPersonalClient {
     //         @RequestParam(name = "size", required = false) Integer size);
 
     @PostMapping("/personal")
-    PersonalDto.BackResponse create(@RequestBody PersonalDto.Create personal);
+    ResponseEntity<PersonalDto.BackResponse> create(@RequestBody PersonalDto.Create personal);
 
     @PutMapping("/personal/{id}")
-    PersonalDto.BackResponse update(@PathVariable("id") Long id, @RequestBody PersonalDto.Update personal);
+    ResponseEntity<PersonalDto.BackResponse> update(@PathVariable("id") Long id, @RequestBody PersonalDto.Update personal);
 
     @DeleteMapping("/personal/{id}")
     ResponseEntity<Void> delete(@PathVariable("id") Long id);

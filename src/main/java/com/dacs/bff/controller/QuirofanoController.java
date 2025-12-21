@@ -24,16 +24,22 @@ public class QuirofanoController {
     @Autowired
     private ApiBackendQuirofanoService quirofanoService;
     @GetMapping("")
-    public ResponseEntity<List<QuirofanoDto>> getAll() throws Exception {
-        log.info("Obteniendo lista de quirofanos");
-        List<QuirofanoDto> data = quirofanoService.getQuirofanos();
-        return new ResponseEntity<>(data, HttpStatus.OK);
-    } 
+    public ResponseEntity<com.dacs.bff.dto.ApiResponse<List<QuirofanoDto>>> getAll() {
+        try {
+            ResponseEntity<List<QuirofanoDto>> response = quirofanoService.getQuirofanos();
+            return com.dacs.bff.util.ApiResponseBuilder.ok(response.getBody());
+        } catch (Exception e) {
+            return com.dacs.bff.util.ApiResponseBuilder.serverError("Error al obtener quirofanos: " + e.getMessage());
+        }
+    }
 
     @PostMapping("")
-    public ResponseEntity<QuirofanoDto> create (@RequestBody QuirofanoDto quirofanoDto) throws Exception {
-        log.info("Creando nuevo quirofano");
-        QuirofanoDto data = quirofanoService.saveQuirofano(quirofanoDto);
-        return new ResponseEntity<>(data, HttpStatus.CREATED);
+    public ResponseEntity<com.dacs.bff.dto.ApiResponse<QuirofanoDto>> create (@RequestBody QuirofanoDto quirofanoDto) {
+        try {
+            ResponseEntity<QuirofanoDto> response = quirofanoService.saveQuirofano(quirofanoDto);
+            return com.dacs.bff.util.ApiResponseBuilder.created(response.getBody(), "Quirofano creado exitosamente");
+        } catch (Exception e) {
+            return com.dacs.bff.util.ApiResponseBuilder.serverError("Error al crear quirofano: " + e.getMessage());
+        }
     }
 }

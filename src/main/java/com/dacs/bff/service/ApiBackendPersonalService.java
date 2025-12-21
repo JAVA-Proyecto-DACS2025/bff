@@ -10,9 +10,9 @@ import com.dacs.bff.dto.PersonalDto;
 public interface ApiBackendPersonalService {     //Cambiar todos a frontresponse
     PaginatedResponse<PersonalDto.BackResponse> getPersonal(Integer page, Integer size, String param) throws Exception;
 
-    PersonalDto.BackResponse create(PersonalDto.Create personalRequestDto);
+    ResponseEntity<PersonalDto.BackResponse> create(PersonalDto.Create personalRequestDto);
 
-    PersonalDto.BackResponse update(Long id,PersonalDto.Update personalRequestDto);
+    ResponseEntity<PersonalDto.BackResponse> update(Long id,PersonalDto.Update personalRequestDto);
 
     ResponseEntity<Void> delete(Long id) throws Exception;
 

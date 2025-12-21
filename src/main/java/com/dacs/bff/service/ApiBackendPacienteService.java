@@ -10,7 +10,7 @@ import com.dacs.bff.dto.PacienteDto.FrontResponse;
 
 public interface ApiBackendPacienteService {
 
-    public List<PacienteDto.FrontResponse> getPacientesByIds(List<Long> ids);
+    // public List<PacienteDto.FrontResponse> getPacientesByIds(List<Long> ids);    norrar
 
     public PacienteDto.FrontResponse savePaciente(PacienteDto.FrontResponse paciente) throws Exception;
 
@@ -18,7 +18,7 @@ public interface ApiBackendPacienteService {
 
     public ResponseEntity<Void> deletePaciente(Long id) throws Exception;
 
-    public List<PacienteDto.FrontResponse> getPacientesHospital(Integer cantidad);
+    public ResponseEntity<List<PacienteDto.FrontResponse>> getPacientesHospital(Integer cantidad);
 
     public PaginatedResponse<PacienteDto.FrontResponse> getPacientesByPage(int page, int size, String search);
 

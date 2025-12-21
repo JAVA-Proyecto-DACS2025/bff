@@ -1,5 +1,7 @@
 package com.dacs.bff.dto;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +38,7 @@ public class PacienteDto {
     }
 
     @Data
-    public static class FrontResponseLite{
+    public static class FrontResponseLite {
         private String nombre;
         private String apellido;
         private String dni;
@@ -52,7 +54,6 @@ public class PacienteDto {
         private String phone;
         private String cell;
         private Id id;
-
     }
 
     @Data

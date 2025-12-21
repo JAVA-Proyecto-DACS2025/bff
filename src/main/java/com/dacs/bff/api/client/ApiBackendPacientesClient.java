@@ -20,7 +20,7 @@ import com.dacs.bff.dto.PaginatedResponse;
 
 public interface ApiBackendPacientesClient {
 
-    @GetMapping("/pacient")          //BORRAR?
+    @GetMapping("/pacient")          
     List<PacienteDto.BackResponse> pacientes(@RequestParam(name = "search", required = false) List<Long> pacienteIds);
 
     @PostMapping("/pacient")
@@ -33,7 +33,7 @@ public interface ApiBackendPacientesClient {
     ResponseEntity<Void> delete(@PathVariable("id") Long id);
 
     @GetMapping("/pacient")
-    PaginatedResponse<PacienteDto.BackResponse> pacientesByPage(
+    PaginatedResponse<PacienteDto.BackResponse> getPacienteS(
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size,
             @RequestParam(value = "search", required = false) String search

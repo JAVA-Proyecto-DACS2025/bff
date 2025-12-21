@@ -31,11 +31,11 @@ public interface ApiBackendCirugiasClient {
                         @RequestParam(name = "size", required = false) Integer size);
 
         @PostMapping("/cirugia")
-        ResponseEntity<CirugiaDTO.BackResponse> create(@RequestBody CirugiaDTO.BackResponse cirugia);
+        ResponseEntity<CirugiaDTO.BackResponse> create(@RequestBody CirugiaDTO.FrontRequest cirugia);
 
         @PutMapping("/cirugia/{id}")
         ResponseEntity<CirugiaDTO.BackResponse> update(@PathVariable("id") String id,
-                        @RequestBody CirugiaDTO.BackResponse cirugia);
+                        @RequestBody CirugiaDTO.FrontRequest cirugia);
 
         @DeleteMapping("/cirugia/{id}")
         ResponseEntity<Void> delete(@PathVariable("id") Long id);

@@ -4,12 +4,14 @@ import com.dacs.bff.dto.QuirofanoDto;
 
 import java.util.List;
 
-public interface ApiBackendQuirofanoService {
-    public List<QuirofanoDto> getQuirofanos();
-    
-    public QuirofanoDto saveQuirofano(QuirofanoDto quirofano) throws Exception;
+import org.springframework.http.ResponseEntity;
 
-    public QuirofanoDto updateQuirofano(QuirofanoDto quirofano) throws Exception;
+public interface ApiBackendQuirofanoService {
+    public ResponseEntity<List<QuirofanoDto>> getQuirofanos();
     
-    public QuirofanoDto deleteQuirofano(Long id) throws Exception;
+    public ResponseEntity<QuirofanoDto> saveQuirofano(QuirofanoDto quirofano) throws Exception;
+
+    public ResponseEntity<QuirofanoDto> updateQuirofano(QuirofanoDto quirofano) throws Exception;
+    
+    public ResponseEntity<QuirofanoDto> deleteQuirofano(Long id) throws Exception;
 }

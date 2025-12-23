@@ -41,14 +41,13 @@ public class CirugiaDTO {
 
     @Data
     public static class FrontRequest {
-        private Long id;
         private Long pacienteId;  
         private Long servicioId;
+        private String prioridad;
         private LocalDateTime fecha_hora_inicio;
         private String estado;
         private String anestesia;
         private String tipo;
-        private String prioridad;
         private Long quirofanoId;
     }
 }

@@ -38,19 +38,15 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService {
 	}
 
 	@Override
-	public ResponseEntity<CirugiaDTO.FrontResponse> createCirugia(CirugiaDTO.FrontResponse cirugia) throws Exception {
-
-		CirugiaDTO.FrontRequest request = cirugiaMapper.toFrontRequest(cirugia);
-		System.err.println("Request to backend: " + request);
-		ResponseEntity<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.create(request);
+	public ResponseEntity<CirugiaDTO.FrontResponse> createCirugia(CirugiaDTO.FrontRequest cirugia) throws Exception {
+		ResponseEntity<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.create(cirugia);
 		return ResponseEntity.status(backResp.getStatusCode()).body(cirugiaMapper.toFrontResponse(backResp.getBody()));
 	}
 
 	@Override
-	public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.FrontResponse cirugia)
+	public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.FrontRequest cirugia)
 			throws Exception {
-		CirugiaDTO.FrontRequest request = cirugiaMapper.toFrontRequest(cirugia);
-		ResponseEntity<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.update(id, request);
+		ResponseEntity<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.update(id, cirugia);
 		return ResponseEntity.status(backResp.getStatusCode()).body(cirugiaMapper.toFrontResponse(backResp.getBody()));
 	}
 

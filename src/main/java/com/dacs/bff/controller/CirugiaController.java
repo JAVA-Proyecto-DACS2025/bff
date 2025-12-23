@@ -52,7 +52,7 @@ public class CirugiaController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> create(@RequestBody CirugiaDTO.FrontResponse cirugiaDTO)
+    public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> create(@RequestBody CirugiaDTO.FrontRequest cirugiaDTO)
             throws Exception {
         try {
             ResponseEntity<CirugiaDTO.FrontResponse> response = cirugiaService.createCirugia(cirugiaDTO);
@@ -64,7 +64,7 @@ public class CirugiaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<CirugiaDTO.FrontResponse>> update(@PathVariable String id,
-            @RequestBody CirugiaDTO.FrontResponse cirugiaDTO) throws Exception {
+            @RequestBody CirugiaDTO.FrontRequest cirugiaDTO) throws Exception {
         try {
             ResponseEntity<CirugiaDTO.FrontResponse> data = cirugiaService.updateCirugia(id, cirugiaDTO);
             return ApiResponseBuilder.ok(data.getBody(), "Cirugia actualizada exitosamente");

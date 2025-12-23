@@ -17,7 +17,7 @@ public interface ApiBackendCirugiaService {
 
     public PaginatedResponse<CirugiaDTO.FrontResponse> getCirugias(Integer page, Integer size);
 
-    public ResponseEntity<CirugiaDTO.FrontResponse> createCirugia(CirugiaDTO.FrontResponse cirugia) throws Exception;
+    public ResponseEntity<CirugiaDTO.FrontResponse> createCirugia(CirugiaDTO.FrontRequest cirugia) throws Exception;
 
     public ResponseEntity<Void> deleteCirugia(Long id) throws Exception;
 
@@ -29,6 +29,6 @@ public interface ApiBackendCirugiaService {
 
     public ResponseEntity<List<ServicioDto>> getServicios();
 
-    public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.FrontResponse cirugia)
+    public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.FrontRequest cirugia)
             throws Exception;
 }

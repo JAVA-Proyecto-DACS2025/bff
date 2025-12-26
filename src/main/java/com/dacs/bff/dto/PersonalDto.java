@@ -10,6 +10,7 @@ public class PersonalDto {
         private Long id;
         private String legajo;
         private String nombre;
+        private String apellido;
         private String dni;
         private String especialidad;
         private String rol;
@@ -23,6 +24,7 @@ public class PersonalDto {
         private String dni;
         private String legajo;
         private String nombre;
+        private String apellido;
         private String rol;
     }
 
@@ -31,6 +33,7 @@ public class PersonalDto {
         private Long id;
         private String legajo;
         private String nombre;
+        private String apellido;
         private String dni;
         private String especialidad;
         private String rol;
@@ -42,6 +45,7 @@ public class PersonalDto {
     static public class Create {
         private String legajo;
         private String nombre;
+        private String apellido;
         private String dni;
         private String especialidad;
         private String rol;
@@ -50,7 +54,15 @@ public class PersonalDto {
     }
 
     @Data
-    static public class Update extends Create {
+    static public class Update {
         private Long id;
+        private String legajo;
+        private String nombre;
+        private String apellido;
+        private String dni;
+        private String especialidad;
+        private String rol;
+        private String estado;
+        private String telefono;
     }
 }

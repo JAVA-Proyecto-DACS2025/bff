@@ -39,7 +39,7 @@ public class CirugiaController {
     @Autowired
     private ApiBackendCirugiaService cirugiaService;
 
-    @GetMapping("")
+    @GetMapping("")                                         //Agregar para manejar filtrado por otros campos
     public ResponseEntity<ApiResponse<PaginatedResponse<CirugiaDTO.FrontResponse>>> getAll(
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size) {
@@ -48,6 +48,18 @@ public class CirugiaController {
             return ApiResponseBuilder.okWithPagination(resp);
         } catch (Exception e) {
             return ApiResponseBuilder.serverError("Error al obtener cirugías: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/por-fechas")
+    public ResponseEntity<ApiResponse<List<CirugiaDTO.FrontResponse>>> getBetweenDates(@RequestParam String fechaInicio,
+            @RequestParam String fechaFin) {
+        try {
+    
+            ResponseEntity<List<CirugiaDTO.FrontResponse>> response = cirugiaService.getBetweenDates(fechaInicio, fechaFin);
+            return ApiResponseBuilder.ok(response.getBody());
+        } catch (Exception e) {
+            return ApiResponseBuilder.serverError("Error al obtener la cirugía: " + e.getMessage());
         }
     }
 

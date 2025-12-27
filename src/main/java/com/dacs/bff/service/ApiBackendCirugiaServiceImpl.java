@@ -38,8 +38,18 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService {
 	}
 
 	@Override
+	public ResponseEntity<List<CirugiaDTO.FrontResponse>> getBetweenDates(String fechaInicial, String fechaFinal) {
+		ResponseEntity<List<CirugiaDTO.BackResponse>> backResp = apiBackendCirugiaClient.getBetweenDates(fechaInicial,
+				fechaFinal);
+		return ResponseEntity.status(backResp.getStatusCode()).body(backResp.getBody().stream()
+				.map(item -> cirugiaMapper.toFrontResponse(item))
+				.toList());
+	}
+
+	@Override
 	public ResponseEntity<CirugiaDTO.FrontResponse> createCirugia(CirugiaDTO.FrontRequest cirugia) throws Exception {
 		ResponseEntity<CirugiaDTO.BackResponse> backResp = apiBackendCirugiaClient.create(cirugia);
+
 		return ResponseEntity.status(backResp.getStatusCode()).body(cirugiaMapper.toFrontResponse(backResp.getBody()));
 	}
 
@@ -54,25 +64,27 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService {
 	public ResponseEntity<Void> deleteCirugia(Long id) throws Exception {
 
 		return apiBackendCirugiaClient.delete(id);
-		
+
 	}
 
 	@Override
 	public ResponseEntity<List<MiembroEquipoDTO.Response>> getEquipoMedico(Long id) {
 		ResponseEntity<List<MiembroEquipoDTO.BackResponse>> response = apiBackendCirugiaClient.getEquipoMedico(id);
 		return ResponseEntity.status(response.getStatusCode())
-			.body(response.getBody().stream()
-				.map(back -> modelMapper.map(back, MiembroEquipoDTO.Response.class))
-				.toList());
+				.body(response.getBody().stream()
+						.map(back -> modelMapper.map(back, MiembroEquipoDTO.Response.class))
+						.toList());
 	}
 
 	@Override
-	public ResponseEntity<List<MiembroEquipoDTO.Response>> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros, Long id) {
-		ResponseEntity<List<MiembroEquipoDTO.BackResponse>> response = apiBackendCirugiaClient.saveEquipoMedico(id, miembros);
+	public ResponseEntity<List<MiembroEquipoDTO.Response>> saveEquipoMedico(List<MiembroEquipoDTO.Create> miembros,
+			Long id) {
+		ResponseEntity<List<MiembroEquipoDTO.BackResponse>> response = apiBackendCirugiaClient.saveEquipoMedico(id,
+				miembros);
 		return ResponseEntity.status(response.getStatusCode())
-			.body(response.getBody().stream()
-				.map(back -> modelMapper.map(back, MiembroEquipoDTO.Response.class))
-				.toList())	;
+				.body(response.getBody().stream()
+						.map(back -> modelMapper.map(back, MiembroEquipoDTO.Response.class))
+						.toList());
 	}
 
 	@Override

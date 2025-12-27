@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dacs.bff.config.FeignConfig;
 import com.dacs.bff.dto.CirugiaDTO;
+import com.dacs.bff.dto.CirugiaDTO.BackResponse;
 import com.dacs.bff.dto.MiembroEquipoDTO;
 import com.dacs.bff.dto.PaginatedResponse;
+import com.dacs.bff.dto.ServicioDto;
 
 @FeignClient(name = "apiBackendCirugiasClient", url = "${feign.client.config.apiBackendCirugiasClient.url}", configuration = FeignConfig.class)
 
@@ -53,5 +55,8 @@ public interface ApiBackendCirugiasClient {
                         @RequestParam(name = "servicioId") Long servicioId);
 
         @GetMapping("/cirugia/servicios")
-        ResponseEntity<List<com.dacs.bff.dto.ServicioDto>> getServicios();
+        ResponseEntity<List<ServicioDto>> getServicios();
+
+        @GetMapping("/cirugia/entre-fechas")
+        ResponseEntity<List<CirugiaDTO.BackResponse>> getBetweenDates(@RequestParam("fechaInicio") String fechaInicio, @RequestParam("fechaFin") String fechaFin);
 }

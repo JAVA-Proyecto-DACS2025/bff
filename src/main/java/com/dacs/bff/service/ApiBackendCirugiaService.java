@@ -31,4 +31,7 @@ public interface ApiBackendCirugiaService {
 
     public ResponseEntity<CirugiaDTO.FrontResponse> updateCirugia(String id, CirugiaDTO.FrontRequest cirugia)
             throws Exception;
+
+
+    public ResponseEntity<List<FrontResponse>> getBetweenDates(String fechaInicial, String fechaFinal);
 }

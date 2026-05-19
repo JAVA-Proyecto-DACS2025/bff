@@ -1,0 +1,66 @@
+type Personal {
+  id: ID!
+  legajo: String
+  nombre: String
+  apellido: String
+  dni: String
+  especialidad: String
+  rol: String
+  estado: String
+  telefono: String
+}
+
+input PersonalFiltersInput {
+  search: String
+  role: String
+  estado: String
+  especialidad: String
+}
+
+type PersonalConnection {
+  content: [Personal!]!
+  totalElements: Int!
+  totalPages: Int!
+  currentPage: Int!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+
+extend type Query {
+  # Una única query unificada para el listado paginado y filtrado
+  personales(page: Int = 0, limit: Int = 16, filter: PersonalFiltersInput): PersonalConnection!
+  
+  # Tu query para buscar por ID individual (se mantiene igual)
+  personal(id: ID!): Personal
+}
+
+# ============ MUTATIONS ============
+
+input CreatePersonalInput {
+  legajo: String!
+  nombre: String!
+  apellido: String!
+  especialidad: String!
+  dni: String!
+  rol: String!
+  estado: String!
+  telefono: String!
+}
+
+input UpdatePersonalInput {
+  id: ID!
+  legajo: String
+  nombre: String
+  apellido: String
+  especialidad: String
+  dni: String
+  rol: String
+  estado: String
+  telefono: String
+}
+
+extend type Mutation {
+  createPersonal(input: CreatePersonalInput!): Personal!
+  updatePersonal(input: UpdatePersonalInput!): Personal!
+  deletePersonal(id: ID!): Boolean!
+}

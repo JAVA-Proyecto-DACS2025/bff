@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dacs.bff.dto.PacienteDto;
 
-@FeignClient(name = "backend", contextId = "pacienteClient", url = "${backend.base-url:http://localhost:8080}")
+@FeignClient(name = "backend", contextId = "pacienteClient", url = "${MS_BACKEND_URL:http://localhost:9003/backend}")
 public interface PacienteClient {
 
     @GetMapping("/pacientes/{id}")

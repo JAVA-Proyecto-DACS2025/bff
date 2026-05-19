@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -130,6 +131,22 @@ public class SecurityConfig {
 
 	// 
 	@Bean
+	@Order(1)
+	public SecurityFilterChain graphiqlFilterChain(HttpSecurity http) throws Exception {
+		http
+			.securityMatcher("/graphiql", "/graphiql/**", "/graphql", "/graphql/**")
+			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+			.csrf(csrf -> csrf.disable())
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.authorizeHttpRequests(authz -> authz
+				.anyRequest().permitAll()
+			);
+
+		return http.build();
+	}
+
+	@Bean
+	@Order(2)
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// DEBUG: Imprimir header Authorization en cada request
 		org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter loggingFilter = new org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter() {
@@ -157,8 +174,6 @@ public class SecurityConfig {
 				.requestMatchers("/actuator/**").permitAll()
 				.requestMatchers("/error").permitAll()
 				.requestMatchers("/ping", "/version").permitAll()
-				.requestMatchers("/graphql", "/graphql/**").permitAll()
-				.requestMatchers("/graphiql", "/graphiql/**").permitAll()
 				.requestMatchers("/conectorping", "/backendping").permitAll()
                 .requestMatchers("/turnos/generar-turnos").permitAll()
 				// .requestMatchers("/cirugia/**").permitAll() //borrar despues

@@ -1,0 +1,96 @@
+type Urgencia {
+  id: ID!
+  pacienteId: ID
+  pacienteNombre: String
+  dni: String
+  servicioId: ID
+  servicioNombre: String
+  nivelUrgencia: Int
+  fechaHoraInicio: LocalDateTime
+  fechaInicio: String
+  horaInicio: String
+  horaFin: String
+  estado: String
+  anestesia: String
+  tipo: String
+  quirofanoId: ID
+  quirofanoNombre: String
+}
+
+type UrgenciaConnection {
+  content: [Urgencia!]!
+  totalElements: Int!
+  totalPages: Int!
+  currentPage: Int!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+
+type UrgenciaMiembroEquipo {
+  personalId: ID
+  legajo: String
+  nombre: String
+  cirugiaId: ID
+  urgenciaId: ID
+  rol: String
+}
+
+type UrgenciaIntervencion {
+  id: ID
+  cirugiaId: ID
+  urgenciaId: ID
+  tipoIntervencionId: ID
+  tipoIntervencionNombre: String
+  observaciones: String
+}
+
+input UrgenciaInput {
+  pacienteId: ID!
+  servicioId: ID!
+  nivelUrgencia: Int!
+  fechaHoraInicio: LocalDateTime!
+  estado: String!
+  anestesia: String!
+  tipo: String!
+  quirofanoId: ID!
+}
+
+input UrgenciaMiembroEquipoInput {
+  personalId: ID!
+  cirugiaId: ID
+  rol: String!
+}
+
+input UrgenciaIntervencionInput {
+  tipoIntervencionId: ID!
+  urgenciaId: ID
+  observaciones: String
+}
+
+extend type Query {
+  urgencias(
+    pagina: Int = 0
+    tamano: Int = 20
+    fechaInicio: String
+    fechaFin: String
+    estado: String
+    search: String
+    sort: String = "fechaHoraInicio"
+    order: String = "asc"
+  ): UrgenciaConnection!
+
+  equipoMedicoUrgencia(urgenciaId: ID!): [UrgenciaMiembroEquipo!]!
+  intervencionesUrgencia(urgenciaId: ID!): [UrgenciaIntervencion!]!
+}
+
+extend type Mutation {
+  createUrgencia(input: UrgenciaInput!): Urgencia!
+  updateUrgencia(input: UrgenciaInput!, id: ID!): Urgencia!
+  deleteUrgencia(id: ID!): Boolean!
+  inicializarUrgencia(id: ID!): Urgencia!
+  finalizarUrgencia(id: ID!): Urgencia!
+  asignarEquipoMedicoUrgencia(urgenciaId: ID!, miembros: [UrgenciaMiembroEquipoInput!]!): [UrgenciaMiembroEquipo!]!
+  createIntervencionUrgencia(urgenciaId: ID!, input: UrgenciaIntervencionInput!): UrgenciaIntervencion!
+  updateIntervencionUrgencia(urgenciaId: ID!, intervencionId: ID!, input: UrgenciaIntervencionInput!): UrgenciaIntervencion!
+  deleteIntervencionUrgencia(urgenciaId: ID!, intervencionId: ID!): Boolean!
+}

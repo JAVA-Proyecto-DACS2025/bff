@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dacs.bff.dto.PersonalDto;
 
-@FeignClient(name = "backend", url = "${backend.base-url:http://localhost:8080}")
+@FeignClient(name = "backend", contextId = "personalClient", url = "${backend.base-url:http://localhost:8080}")
 public interface PersonalClient {
 
     @GetMapping("/personal/{id}")

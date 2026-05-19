@@ -157,6 +157,8 @@ public class SecurityConfig {
 				.requestMatchers("/actuator/**").permitAll()
 				.requestMatchers("/error").permitAll()
 				.requestMatchers("/ping", "/version").permitAll()
+				.requestMatchers("/graphql", "/graphql/**").permitAll()
+				.requestMatchers("/graphiql", "/graphiql/**").permitAll()
 				.requestMatchers("/conectorping", "/backendping").permitAll()
                 .requestMatchers("/turnos/generar-turnos").permitAll()
 				// .requestMatchers("/cirugia/**").permitAll() //borrar despues

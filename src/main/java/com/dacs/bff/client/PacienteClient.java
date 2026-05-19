@@ -5,13 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dacs.bff.dto.PacienteDto;
 
-@FeignClient(name = "backend", url = "${backend.base-url:http://localhost:8080}")
+@FeignClient(name = "backend", contextId = "pacienteClient", url = "${backend.base-url:http://localhost:8080}")
 public interface PacienteClient {
 
     @GetMapping("/pacientes/{id}")

@@ -1,0 +1,62 @@
+type Paciente {
+  id: ID!
+  nombre: String
+  apellido: String
+  dni: String
+  fechaNacimiento: String
+  direccion: String
+  telefono: String
+  altura: Float
+  peso: Float
+  active: Boolean
+}
+
+input PacienteFiltersInput {
+  search: String
+  active: Boolean
+}
+
+type PacientesConnection {
+  content: [Paciente!]!
+  totalElements: Int!
+  totalPages: Int!
+  currentPage: Int!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+
+extend type Query {
+  pacientes(page: Int = 0, limit: Int = 16, filter: PacienteFiltersInput): PacientesConnection!
+  paciente(id: ID!): Paciente
+}
+
+input CreatePacienteInput {
+  nombre: String!
+  apellido: String!
+  dni: String!
+  fechaNacimiento: String!
+  direccion: String!
+  telefono: String!
+  altura: Float
+  peso: Float
+}
+
+input UpdatePacienteInput {
+  id: ID!
+  nombre: String
+  apellido: String
+  dni: String
+  fechaNacimiento: String
+  direccion: String
+  telefono: String
+  altura: Float
+  peso: Float
+  active: Boolean
+}
+
+extend type Mutation {
+  createPaciente(input: CreatePacienteInput!): Paciente!
+  updatePaciente(input: UpdatePacienteInput!): Paciente!
+  activatePaciente(id: ID!): Boolean!
+  deactivatePaciente(id: ID!): Boolean!
+}

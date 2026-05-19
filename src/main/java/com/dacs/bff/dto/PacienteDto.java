@@ -79,4 +79,28 @@ public class PacienteDto {
     public static class Id {
         private String value;
     }
+
+    @Data
+    public static class Create {
+        private String nombre;
+        private String apellido;
+        private String dni;
+        private String fecha_nacimiento;
+        private String direccion;
+        private String telefono;
+        private Double altura;
+        private Double peso;   }
+
+    @Data 
+    public static class Update {
+        private Long id;
+        private String nombre;
+        private String apellido;
+        private String dni;
+        private String fecha_nacimiento;
+        private String direccion;
+        private String telefono;
+        private Double altura;
+        private Double peso;   
+    }   
 }

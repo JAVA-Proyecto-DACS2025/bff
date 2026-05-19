@@ -2,7 +2,6 @@ package com.dacs.bff.service;
 
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,9 +24,6 @@ public class ApiBackendCirugiaServiceImpl implements ApiBackendCirugiaService {
 
 	@Autowired
 	private CirugiaMapper cirugiaMapper;
-
-	@Autowired
-	private ModelMapper modelMapper;
 
 	@Override
 	public PaginacionDto.Response<CirugiaDTO.FrontResponse> getCirugias(Integer pagina, Integer tamaño, String fechaInicio, String fechaFin, String estado, String search, String sort, String order) {

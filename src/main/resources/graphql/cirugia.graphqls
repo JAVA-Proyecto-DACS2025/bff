@@ -1,0 +1,104 @@
+scalar LocalDateTime
+
+type Cirugia {
+  id: ID!
+  pacienteId: ID
+  pacienteNombre: String
+  dni: String
+  servicioId: ID
+  servicioNombre: String
+  prioridad: String
+  fechaInicio: String
+  horaInicio: String
+  horaFin: String
+  estado: String
+  anestesia: String
+  tipo: String
+  quirofanoId: ID
+  quirofanoNombre: String
+}
+
+type MiembroEquipo {
+  personalId: ID
+  legajo: String
+  nombre: String
+  cirugiaId: ID
+  urgenciaId: ID
+  rol: String
+}
+
+type Servicio {
+  id: ID
+  nombre: String
+  duracionMinutos: Int
+}
+
+type Intervencion {
+  id: ID
+  cirugiaId: ID
+  urgenciaId: ID
+  tipoIntervencionId: ID
+  tipoIntervencionNombre: String
+  observaciones: String
+}
+
+type CirugiaConnection {
+  content: [Cirugia!]!
+  totalElements: Int!
+  totalPages: Int!
+  currentPage: Int!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+
+input CirugiaInput {
+  pacienteId: ID!
+  servicioId: ID!
+  prioridad: String!
+  fechaHoraInicio: LocalDateTime!
+  estado: String!
+  anestesia: String!
+  tipo: String!
+  quirofanoId: ID!
+}
+
+input MiembroEquipoInput {
+  personalId: ID!
+  urgenciaId: ID
+  rol: String!
+}
+
+input IntervencionInput {
+  urgenciaId: ID
+  tipoIntervencionId: ID!
+  observaciones: String
+}
+
+extend type Query {
+  cirugias(
+    pagina: Int = 0
+    tamano: Int = 20
+    fechaInicio: String
+    fechaFin: String
+    estado: String
+    search: String
+    sort: String = "fechaHoraInicio"
+    order: String = "asc"
+  ): CirugiaConnection!
+
+  equipoMedico(cirugiaId: ID!): [MiembroEquipo!]!
+  serviciosCirugia(pagina: Int = 0, tamano: Int = 10): [Servicio!]!
+  intervenciones(cirugiaId: ID!): [Intervencion!]!
+}
+
+extend type Mutation {
+  createCirugia(input: CirugiaInput!): Cirugia!
+  updateCirugia(id: ID!, input: CirugiaInput!): Cirugia!
+  deleteCirugia(id: ID!): Boolean!
+  inicializarCirugia(id: ID!): Cirugia!
+  finalizarCirugia(id: ID!): Cirugia!
+  asignarEquipoMedico(cirugiaId: ID!, miembros: [MiembroEquipoInput!]!): [MiembroEquipo!]!
+  createIntervencion(cirugiaId: ID!, input: IntervencionInput!): Intervencion!
+  updateIntervencion(cirugiaId: ID!, intervencionId: ID!, input: IntervencionInput!): Intervencion!
+  deleteIntervencion(cirugiaId: ID!, intervencionId: ID!): Boolean!
+}

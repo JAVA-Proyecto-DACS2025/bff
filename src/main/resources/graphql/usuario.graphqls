@@ -1,0 +1,64 @@
+type Usuario {
+  id: ID
+  username: String
+  email: String
+  firstName: String
+  lastName: String
+  enabled: Boolean
+  emailVerified: Boolean
+  roles: [String!]
+}
+
+type UsuarioConnection {
+  content: [Usuario!]!
+  totalElements: Int!
+  totalPages: Int!
+  currentPage: Int!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+
+input CreateUsuarioInput {
+  username: String!
+  email: String
+  firstName: String
+  lastName: String
+  enabled: Boolean = true
+  emailVerified: Boolean = false
+  roles: [String!]
+  credentials: [CredentialInput!]
+}
+
+input UpdateUsuarioInput {
+  id: ID!
+  username: String
+  email: String
+  firstName: String
+  lastName: String
+  enabled: Boolean
+  emailVerified: Boolean
+  roles: [String!]
+  credentials: [CredentialInput!]
+}
+
+input CredentialInput {
+  type: String = "password"
+  value: String!
+  temporary: Boolean = false
+}
+
+input SetUsuarioStatusInput {
+  id: ID!
+  enabled: Boolean!
+}
+
+extend type Query {
+  usuario(id: ID!): Usuario
+  usuarios(page: Int = 0, limit: Int = 16, search: String): UsuarioConnection!
+}
+
+extend type Mutation {
+  createUsuario(input: CreateUsuarioInput!): Usuario!
+  updateUsuario(input: UpdateUsuarioInput!): Usuario!
+  setUsuarioStatus(input: SetUsuarioStatusInput!): Usuario!
+}

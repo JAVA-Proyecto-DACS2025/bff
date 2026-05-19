@@ -4,7 +4,17 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8080/realms/dacs}
-
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql
+    http:                  # <-- Agregamos este bloque intermedio
+      path: /graphql       # <-- Nueva propiedad recomendada por Spring
+    cors:
+      allowed-origins: "http://localhost:3000"
+      allowed-methods: "POST,GET,OPTIONS"
+      allowed-headers: "Authorization,Content-Type"
+      
 feign:
   client:
     config:

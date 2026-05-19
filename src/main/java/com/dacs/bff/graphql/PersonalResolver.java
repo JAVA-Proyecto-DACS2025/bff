@@ -30,14 +30,7 @@ public class PersonalResolver {
         int p = page == null ? 0 : page;
         int l = limit == null ? 16 : limit;
         var resp = personalClient.list(p, l, search, role);
-        PersonalConnection out = new PersonalConnection();
-        out.setContent(resp.getContenido());
-        out.setTotalElements(resp.getTotalElementos());
-        out.setTotalPages(resp.getTotalPaginas());
-        out.setCurrentPage(resp.getPagina());
-        out.setHasNextPage(resp.getPagina() < resp.getTotalPaginas() - 1);
-        out.setHasPreviousPage(resp.getPagina() > 0);
-        return out;
+        return GraphQLConnectionMapper.from(resp, PersonalConnection::new);
     }
 
     @MutationMapping

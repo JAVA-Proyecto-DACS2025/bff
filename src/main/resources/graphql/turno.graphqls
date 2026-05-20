@@ -1,0 +1,24 @@
+type Turno {
+  id: ID!
+  quirofanoId: ID!
+  quirofanoNombre: String
+  fechaInicio: String!
+  horaInicio: String!
+  horaFin: String!
+  duracionMinutos: Int!
+  disponible: Boolean!
+  estado: String
+}
+
+type TurnoConnection {
+  content: [Turno!]!
+  totalElements: Int!
+  totalPages: Int!
+  currentPage: Int!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+
+extend type Query {
+  turnosDisponibles(pagina: Int!, tamano: Int!, fechaInicio: String!, fechaFin: String!, quirofanoId: Int, estado: String, duracionMinutos: Int, servicioId: Long): TurnoConnection!
+}

@@ -1,0 +1,24 @@
+type Quirofano {
+  id: ID!
+  nombre: String!
+  numero: Int
+  piso: String
+  estado: String
+  capacidad: Int
+}
+
+extend type Query {
+  quirofanos: [Quirofano!]!
+}
+
+extend type Mutation {
+  createQuirofano(input: QuirofanoInput!): Quirofano!
+}
+
+input QuirofanoInput {
+  nombre: String!
+  numero: Int
+  piso: String
+  estado: String
+  capacidad: Int
+}

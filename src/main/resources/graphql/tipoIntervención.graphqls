@@ -1,0 +1,10 @@
+type TipoIntervencion {
+  id: ID!
+  nombre: String!
+  descripcion: String
+  duracionEstimada: Int
+}
+
+extend type Query {
+  tiposIntervencion: [TipoIntervencion!]!
+}

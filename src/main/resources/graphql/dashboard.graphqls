@@ -1,0 +1,13 @@
+type EstadisticasGenerales {
+  totalCirugias: Int!
+  totalUrgencias: Int!
+  cirugiasHoy: Int!
+  urgenciasHoy: Int!
+  quirofanosDisponibles: Int!
+  personalDisponible: Int!
+  pacientesEnEspera: Int!
+}
+
+extend type Query {
+  estadisticasGenerales: EstadisticasGenerales!
+}

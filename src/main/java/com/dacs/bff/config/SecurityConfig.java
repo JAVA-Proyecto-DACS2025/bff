@@ -2,6 +2,9 @@ package com.dacs.bff.config;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
@@ -72,13 +75,45 @@ public class SecurityConfig {
 	
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowedOriginPatterns(Arrays.asList("*")); // Use allowedOriginPatterns for wildcards
-		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-		config.setAllowedHeaders(Arrays.asList("*"));
-		config.setExposedHeaders(Arrays.asList("*"));
-		config.setAllowCredentials(false); // Must be false with "*"
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+
+		// 🚨 CRÍTICO: Tiene que ser true para que Apollo con 'credentials: include' no explote
+		config.setAllowCredentials(true);
+
+		// Definimos los orígenes específicos permitidos. 
+		// Al usar allowCredentials(true), NO podemos usar "*" a secas.
+		config.setAllowedOriginPatterns(Arrays.asList(
+			"http://localhost:4200",     // Tu front de Angular en desarrollo
+			"http://localhost:9001",     // El propio BFF si fuera necesario
+			"http://localhost:3000",     // React/NextJS si tenés pruebas ahí
+			"https://dacs2025.local",    // El dominio local de la materia/proyecto
+			"https://*.dacs2025.local"
+		));
+
+		// Cabeceras estándar que necesita el ciclo de vida de Apollo y Keycloak
+		config.setAllowedHeaders(Arrays.asList(
+			"Authorization",
+			"Content-Type",
+			"X-Requested-With",
+			"Accept",
+			"Origin",
+			"Access-Control-Request-Method",
+			"Access-Control-Request-Headers"
+		));
+
+		// Exponemos las cabeceras de validación para que el navegador las lea correctamente
+		config.setExposedHeaders(Arrays.asList(
+			"Access-Control-Allow-Origin",
+			"Access-Control-Allow-Credentials"
+		));
+
+		// Métodos soportados (OPTIONS es vital para el preflight previo al POST de GraphQL)
+		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+
+		// Cacheamos la respuesta del preflight por 1 hora para no saturar de peticiones OPTIONS
+		config.setMaxAge(3600L);
+
 		source.registerCorsConfiguration("/**", config);
 		return source;
 	}
@@ -103,30 +138,45 @@ public class SecurityConfig {
 	 * Keycloak
 	 * y los transforma en autoridades de Spring Security (ej: ROLE_ROLE-A).
 	 */
-	@SuppressWarnings("unchecked")
 	private Collection<GrantedAuthority> extractRolesFromKeycloak(Jwt jwt) {
+		Set<String> roles = new LinkedHashSet<>();
+
 		if (jwt.hasClaim("realm_access")) {
 			// Obtiene el mapa 'realm_access'
 			Object realmAccessClaim = jwt.getClaim("realm_access");
-			if (realmAccessClaim instanceof java.util.Map) {
-				java.util.Map<String, Object> realmAccess = (java.util.Map<String, Object>) realmAccessClaim;
-
-				// Obtiene la lista de roles del campo 'roles'
-				Object rolesClaim = realmAccess.get("roles");
-				if (rolesClaim instanceof Collection) {
-					Collection<String> roles = (Collection<String>) rolesClaim;
-					
-					// Mapea cada rol, añade el prefijo "ROLE_" y lo convierte a
-					// SimpleGrantedAuthority
-					return roles.stream()
-							.map(role -> new SimpleGrantedAuthority("ROLE_" + role)) // 💥 Aquí se mapea el prefijo
-																						// "ROLE_"
-							.collect(Collectors.toList());
+			if (realmAccessClaim instanceof Map<?, ?> realmAccess) {
+				Object realmRolesClaim = realmAccess.get("roles");
+				if (realmRolesClaim instanceof Collection<?> realmRoles) {
+					for (Object role : realmRoles) {
+						if (role != null) {
+							roles.add(role.toString());
+						}
+					}
 				}
 			}
 		}
-		// Si no se encuentran roles de realm, devuelve una lista vacía
-		return java.util.Collections.emptyList();
+
+		if (jwt.hasClaim("resource_access")) {
+			Object resourceAccessClaim = jwt.getClaim("resource_access");
+			if (resourceAccessClaim instanceof Map<?, ?> resourceAccess) {
+				for (Object clientAccess : resourceAccess.values()) {
+					if (clientAccess instanceof Map<?, ?> clientRolesMap) {
+						Object clientRolesClaim = clientRolesMap.get("roles");
+						if (clientRolesClaim instanceof Collection<?> clientRoles) {
+							for (Object role : clientRoles) {
+								if (role != null) {
+									roles.add(role.toString());
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return roles.stream()
+				.map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+				.collect(Collectors.toList());
 	}
 
 	// 
@@ -134,7 +184,7 @@ public class SecurityConfig {
 	@Order(1)
 	public SecurityFilterChain graphiqlFilterChain(HttpSecurity http) throws Exception {
 		http
-			.securityMatcher("/graphiql", "/graphiql/**", "/graphql", "/graphql/**")
+			.securityMatcher("/graphiql", "/graphiql/**")
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.csrf(csrf -> csrf.disable())
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

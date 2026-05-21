@@ -26,7 +26,7 @@ public class QuirofanoResolver {
     }
 
     @MutationMapping
-    public QuirofanoDTO createQuirofano(@Argument("input") QuirofanoDTO input) {
+    public QuirofanoDTO createQuirofano(@Argument("input") QuirofanoDTO input) throws Exception {
         return quirofanoService.saveQuirofano(input).getBody();
     }
 }

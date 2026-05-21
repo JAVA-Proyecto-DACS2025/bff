@@ -47,6 +47,42 @@ public class GraphQLConfig {
                 })
                 .build();
 
-        return wiringBuilder -> wiringBuilder.scalar(localDateTimeScalar);
+        GraphQLScalarType longScalar = GraphQLScalarType.newScalar()
+                .name("Long")
+                .description("64-bit signed integer scalar")
+                .coercing(new Coercing<Long, Long>() {
+                    @Override
+                    public Long serialize(Object dataFetcherResult) throws CoercingSerializeException {
+                        if (dataFetcherResult instanceof Number number) {
+                            return number.longValue();
+                        }
+                        throw new CoercingSerializeException("Expected a numeric value.");
+                    }
+
+                    @Override
+                    public Long parseValue(Object input) throws CoercingParseValueException {
+                        if (input instanceof Number number) {
+                            return number.longValue();
+                        }
+                        if (input instanceof String stringValue) {
+                            return Long.parseLong(stringValue);
+                        }
+                        throw new CoercingParseValueException("Expected a numeric value.");
+                    }
+
+                    @Override
+                    public Long parseLiteral(Object input) throws CoercingParseLiteralException {
+                        if (input instanceof graphql.language.IntValue intValue) {
+                            return intValue.getValue().longValue();
+                        }
+                        if (input instanceof StringValue stringValue) {
+                            return Long.parseLong(stringValue.getValue());
+                        }
+                        throw new CoercingParseLiteralException("Expected an IntValue or StringValue.");
+                    }
+                })
+                .build();
+
+        return wiringBuilder -> wiringBuilder.scalar(localDateTimeScalar).scalar(longScalar);
     }
 }

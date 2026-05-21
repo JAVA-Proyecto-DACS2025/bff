@@ -1,3 +1,5 @@
+scalar Long
+
 type Turno {
   id: ID!
   quirofanoId: ID!

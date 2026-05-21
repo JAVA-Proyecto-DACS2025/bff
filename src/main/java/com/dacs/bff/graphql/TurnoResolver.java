@@ -5,8 +5,6 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
-import com.dacs.bff.dto.PaginacionDto;
-import com.dacs.bff.dto.TurnoDto;
 import com.dacs.bff.service.ApiBackendTurnoService;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +32,6 @@ public class TurnoResolver {
         int qId = quirofanoId == null ? 0 : quirofanoId;
         
         var resp = turnoService.getTurnosDisponibles(p, t, fechaInicio, fechaFin, qId, estado, duracionMinutos, servicioId);
-        return GraphQLConnectionMapper.from(resp, TurnoConnection::new);
+        return GraphQLConnectionMapper.from(resp.getBody(), TurnoConnection::new);
     }
 }
